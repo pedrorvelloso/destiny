@@ -1,0 +1,19 @@
+{
+  "name": "destiny",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo test script",
+    "start": "echo start script",
+    "dev:server": "echo dev:server script",
+    "buid": "echo build scripts"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "typescript": "^3.8.3"
+  }
+}
