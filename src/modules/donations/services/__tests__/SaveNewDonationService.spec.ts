@@ -18,5 +18,7 @@ describe('SaveNewDonation', () => {
     });
 
     expect(donation.amount).toBe(15);
+    expect(donation.message).toBe('Donation Message');
+    expect(donation.from).toBe('Donator');
   });
 });
