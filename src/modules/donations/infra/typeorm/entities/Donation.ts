@@ -21,6 +21,9 @@ class Donation {
   @Column()
   amount: number;
 
+  @Column()
+  source: string;
+
   @CreateDateColumn()
   created_at: Date;
 

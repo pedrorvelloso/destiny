@@ -15,6 +15,7 @@ describe('SaveNewDonation', () => {
       from: 'Donator',
       message: 'Donation Message',
       amount: 15,
+      source: 'SomeListener',
     });
 
     expect(donation.amount).toBe(15);

@@ -1,4 +1,16 @@
+/* eslint-disable global-require */
 import 'reflect-metadata';
 
-import '@shared/infra/environment';
-import '@shared/infra/http/server';
+import connection from '@shared/infra/typeorm';
+
+connection.then(() => {
+  // start IoC Container
+  require('@shared/container');
+
+  // start environment variables
+  require('@shared/infra/environment');
+
+  // start http and listeners
+  require('@shared/infra/http/server');
+  require('@modules/donations/listeners');
+});

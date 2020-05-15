@@ -3,7 +3,6 @@ import server from 'http';
 
 import routes from './routes';
 
-import '@modules/donations/listeners';
 import { createWebsocket } from '../ws';
 
 const app = express();
