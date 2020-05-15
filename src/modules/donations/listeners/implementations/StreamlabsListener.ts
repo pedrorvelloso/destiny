@@ -1,7 +1,8 @@
 import client from 'socket.io-client';
-import { container } from 'tsyringe';
 
 import SaveNewDonationService from '@modules/donations/services/SaveNewDonationService';
+import { container } from '@shared/container';
+
 import IDonationListener from '../models/IDonationListener';
 
 interface IDonationMessage {
@@ -37,7 +38,7 @@ class StreamlabsListener implements IDonationListener {
             from,
             amount,
             message,
-            source: 'StreamlabsListener',
+            source: 'Streamlabs',
           });
         });
       }

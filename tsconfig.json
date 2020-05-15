@@ -19,5 +19,8 @@
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
 }

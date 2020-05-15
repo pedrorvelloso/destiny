@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe';
+import { injectable, inject } from 'inversify';
 import Donation from '../infra/typeorm/entities/Donation';
 import IDonationRepository from '../repositories/IDonationRepository';
 

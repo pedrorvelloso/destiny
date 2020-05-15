@@ -1,7 +1,7 @@
 import socketIo from 'socket.io';
 import { Server } from 'http';
 
-export const createWebsocket = (server: Server): socketIo.Server => {
+export const createWebsocket = (server: any): socketIo.Server => {
   const io = socketIo(server);
 
   io.on('connection', socket => {
