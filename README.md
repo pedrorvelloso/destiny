@@ -1,3 +1,22 @@
 # Destiny
 
-Destiny is a *payment* tracker. Intended to use for charity events, so feel free to host your own instance 😄!
+Destiny is a *donation* tracker for speedruns/gaming charity events. In the future I'll also include features to hold donations incentives and create events with schedule.
+
+## MVP - server (with StreamLabs)
+- [x] StreamLabs listener (with socket.io-client)
+- [x] Express server with Inversify
+- [x] Service to store new donations from StreamLabs
+- [x] Service to list all donations
+- [x] Service to list unrevised donations
+- [x] Service to review donations
+- [ ] Send total/new revised donation when a new donation is revised
+- [ ] Add simple user system to ensure authentication when reviewing donation
+- [ ] JWT
+
+## Beta
+- [ ] Set up event
+- [ ] Set up event schedule
+- [ ] Donations incentives
+
+## Frontend
+*Soon (in another repo :P)*
