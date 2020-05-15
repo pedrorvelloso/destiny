@@ -21,6 +21,7 @@ const inversifyServer = new InversifyExpressServer(
 );
 
 inversifyServer.setConfig(application => {
+  application.use(express.json());
   application.use((req, _, next) => {
     req.ws = websocket;
     return next();

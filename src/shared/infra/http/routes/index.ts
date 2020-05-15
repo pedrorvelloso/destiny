@@ -1,1 +1,1 @@
-import '@modules/donations/infra/http/controllers/DonationsController';
+import '@modules/donations/infra/http/controllers/';
