@@ -1,3 +1,5 @@
+import express from 'express';
+import http from 'http';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
 import { container } from '@shared/container';
@@ -6,8 +8,17 @@ import './routes';
 
 import { createWebsocket } from '../ws';
 
-const inversifyServer = new InversifyExpressServer(container);
-const websocket = createWebsocket(inversifyServer);
+const expressServer = express();
+
+const httpServer = http.createServer(expressServer);
+const websocket = createWebsocket(httpServer);
+
+const inversifyServer = new InversifyExpressServer(
+  container,
+  null,
+  null,
+  expressServer,
+);
 
 inversifyServer.setConfig(application => {
   application.use((req, _, next) => {
@@ -16,8 +27,8 @@ inversifyServer.setConfig(application => {
   });
 });
 
-const app = inversifyServer.build();
+inversifyServer.build();
 
-app.listen(3333, () => {
+httpServer.listen(3333, () => {
   console.log('🚀 Listening on port 3333');
 });
