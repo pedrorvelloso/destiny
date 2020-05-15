@@ -22,11 +22,18 @@ class DonationRepository implements IDonationRepository {
       amount,
       message,
       source,
+      reviewed: false,
     });
 
     await this.ormRepository.save(donation);
 
     return donation;
+  }
+
+  public async all(): Promise<Donation[]> {
+    const donations = this.ormRepository.find();
+
+    return donations;
   }
 }
 

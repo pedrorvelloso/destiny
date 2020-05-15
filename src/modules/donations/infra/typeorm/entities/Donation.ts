@@ -1,7 +1,6 @@
 import {
   Entity,
   ObjectIdColumn,
-  ObjectID,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
@@ -10,7 +9,7 @@ import {
 @Entity()
 class Donation {
   @ObjectIdColumn()
-  _id: ObjectID;
+  _id: string;
 
   @Column()
   from: string;
@@ -23,6 +22,9 @@ class Donation {
 
   @Column()
   source: string;
+
+  @Column({ default: false })
+  reviewed: boolean;
 
   @CreateDateColumn()
   created_at: Date;
