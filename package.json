@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "start": "echo start script",
+    "start": "node -r ./tsconfig-paths-bootstrap.js build/bootstrap.js",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --transpileOnly --ignore-watch node_modules src/bootstrap.ts",
     "dev:server:debug": "ts-node-dev -r tsconfig-paths/register --transpileOnly --inspect --ignore-watch node_modules src/bootstrap.ts",
     "build": "tsc"
