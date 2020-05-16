@@ -18,5 +18,9 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [ ] Set up event schedule
 - [ ] Donations incentives
 
+## Release
+- [ ] Add donation method w/ StripeJS
+- [ ] Listen to stripe webhooks and store new donations
+
 ## Frontend
 *Soon (in another repo :P)*
