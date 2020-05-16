@@ -7,9 +7,9 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [x] Express server with Inversify
 - [x] Service to store new donations from StreamLabs
 - [x] Service to list all donations
-- [x] Service to list unrevised donations
+- [x] Service to list unreviewed donations
 - [x] Service to review donations
-- [ ] Send total/new revised donation when a new donation is revised
+- [ ] Send total/new reviewed donation when a new donation is reviewed
 - [ ] Add simple user system to ensure authentication when reviewing donation
 - [ ] JWT
 
