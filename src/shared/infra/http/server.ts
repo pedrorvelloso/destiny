@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 import http from 'http';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
@@ -6,6 +6,7 @@ import { container } from '@shared/container';
 
 import './routes';
 
+import HttpError from '@shared/errors/HttpError';
 import { createWebsocket } from '../ws';
 
 const expressServer = express();
@@ -26,6 +27,29 @@ inversifyServer.setConfig(application => {
     req.ws = websocket;
     return next();
   });
+});
+
+inversifyServer.setErrorConfig(application => {
+  application.use(
+    (
+      error: Error,
+      request: express.Request,
+      response: express.Response,
+      _: express.NextFunction,
+    ): Response => {
+      if (error instanceof HttpError) {
+        return response.status(error.statusCode).json({
+          status: 'error',
+          message: error.message,
+        });
+      }
+      console.error(error.stack);
+      return response.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      });
+    },
+  );
 });
 
 inversifyServer.build();

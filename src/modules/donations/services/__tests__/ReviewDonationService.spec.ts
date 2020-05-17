@@ -1,4 +1,5 @@
 import FakeDonationRepository from '@modules/donations/repositories/fakes/FakeDonationRepository';
+import HttpError from '@shared/errors/HttpError';
 import SaveNewDonationService from '../SaveNewDonationService';
 import ReviewDonationService from '../ReviewDonationService';
 
@@ -33,7 +34,7 @@ describe('ReviewDonation', () => {
   it('should not be able to review non-existing donation', async () => {
     await expect(
       reviewDonation.execute({ donation_id: 'non-existing' }),
-    ).rejects.toBeInstanceOf(Error);
+    ).rejects.toBeInstanceOf(HttpError);
   });
 
   it('should be able to review the same donation twice', async () => {
@@ -56,6 +57,6 @@ describe('ReviewDonation', () => {
       reviewDonation.execute({
         donation_id: donation._id,
       }),
-    ).rejects.toBeInstanceOf(Error);
+    ).rejects.toBeInstanceOf(HttpError);
   });
 });
