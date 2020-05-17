@@ -3,6 +3,8 @@ import client from 'socket.io-client';
 import SaveNewDonationService from '@modules/donations/services/SaveNewDonationService';
 import { container } from '@shared/container';
 
+import { websocket } from '@shared/infra/http/server';
+import { EVENTS } from '@shared/infra/ws/events';
 import IDonationListener from '../models/IDonationListener';
 
 interface IDonationMessage {
@@ -34,12 +36,14 @@ class StreamlabsListener implements IDonationListener {
     this.client.on('event', (eventData: IStreamLabsEvent) => {
       if (eventData.type === 'donation') {
         eventData.message.forEach(async ({ amount, from, message }) => {
-          await saveNewDonation.execute({
+          const donation = await saveNewDonation.execute({
             from,
             amount,
             message,
             source: 'Streamlabs',
           });
+
+          websocket.emit(EVENTS.NEW_DONATION, donation);
         });
       }
     });
