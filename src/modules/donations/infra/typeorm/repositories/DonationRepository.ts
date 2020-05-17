@@ -3,7 +3,7 @@ import { getMongoRepository, MongoRepository } from 'typeorm';
 import IDonationRepository from '@modules/donations/repositories/IDonationRepository';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
 
-import Donation from '../typeorm/entities/Donation';
+import Donation from '../entities/Donation';
 
 @injectable()
 class DonationRepository implements IDonationRepository {

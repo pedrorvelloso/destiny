@@ -8,7 +8,7 @@ import {
 
 import ListAllDonationsService from '@modules/donations/services/ListAllDonationsService';
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
-import ListUnrevisedDonationsService from '@modules/donations/services/ListUnrevisedDonationsService';
+import ListUnrevisedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import { container } from '@shared/container';
 
 @controller('/donations')
@@ -25,7 +25,7 @@ class DonationsController implements interfaces.Controller {
     return response.json(donations);
   }
 
-  @httpGet('/unrevised')
+  @httpGet('/unreviewed')
   public async listUnrevisedDonations(
     request: Request,
     response: Response,
