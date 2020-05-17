@@ -1,6 +1,6 @@
-import FakeDonationRepository from '@modules/donations/repositories/fakes/FakeDonationRepository';
+import FakeDonationRepository from '../../repositories/fakes/FakeDonationRepository';
 import SaveNewDonationService from '../SaveNewDonationService';
-import ListUnrevisedDonationsService from '../ListUnrevisedDonationsService';
+import ListUnrevisedDonationsService from '../ListUnreviewedDonationsService';
 import ReviewDonationService from '../ReviewDonationService';
 
 let fakeDonationRepository: FakeDonationRepository;

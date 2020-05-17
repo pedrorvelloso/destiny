@@ -11,7 +11,7 @@ import { createWebsocket } from '../ws';
 const expressServer = express();
 
 const httpServer = http.createServer(expressServer);
-const websocket = createWebsocket(httpServer);
+export const websocket = createWebsocket(httpServer);
 
 const inversifyServer = new InversifyExpressServer(
   container,

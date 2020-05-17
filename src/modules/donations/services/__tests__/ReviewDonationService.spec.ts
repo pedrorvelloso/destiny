@@ -35,4 +35,27 @@ describe('ReviewDonation', () => {
       reviewDonation.execute({ donation_id: 'non-existing' }),
     ).rejects.toBeInstanceOf(Error);
   });
+
+  it('should be able to review the same donation twice', async () => {
+    const donation = await saveNewDonation.execute({
+      from: 'Donator',
+      message: 'Donation Message',
+      amount: 15,
+      source: 'SomeListener',
+    });
+
+    expect(donation.reviewed).toBe(false);
+
+    await reviewDonation.execute({
+      donation_id: donation._id,
+    });
+
+    expect(donation.reviewed).toBe(true);
+
+    await expect(
+      reviewDonation.execute({
+        donation_id: donation._id,
+      }),
+    ).rejects.toBeInstanceOf(Error);
+  });
 });

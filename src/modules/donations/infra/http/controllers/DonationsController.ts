@@ -10,9 +10,15 @@ import ListAllDonationsService from '@modules/donations/services/ListAllDonation
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
 import ListUnrevisedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import { container } from '@shared/container';
+import { EVENTS } from '@shared/infra/ws/events';
 
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
+  /**
+   * @TODO store total in DB
+   */
+  private total = 0;
+
   @httpGet('/')
   public async getAllDonations(
     request: Request,
@@ -48,6 +54,10 @@ class DonationsController implements interfaces.Controller {
     const reviewDonation = container.resolve(ReviewDonationService);
 
     const donation = await reviewDonation.execute({ donation_id });
+
+    this.total += donation.amount;
+    request.ws.emit(EVENTS.TOTAL_DONATIONS, this.total);
+    request.ws.emit(EVENTS.NEW_REVIEWED_DONATION, donation);
 
     return response.json(donation);
   }

@@ -16,7 +16,8 @@ class ReviewDonationService {
   public async execute({ donation_id }: IRequest): Promise<Donation> {
     const donation = await this.donationRepository.findById(donation_id);
 
-    if (!donation) throw new Error('Donation does not exists');
+    if (!donation || donation.reviewed)
+      throw new Error('Error reviewing donation');
 
     donation.reviewed = true;
 
