@@ -10,6 +10,7 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [x] Service to list unreviewed donations
 - [x] Service to review donations
 - [x] Send total/new reviewed donation when a new donation is reviewed
+- [ ] Store total donations in database
 - [ ] JWT
 - [ ] Add simple user system to ensure authentication when reviewing donation
 
@@ -21,6 +22,7 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 ## Release
 - [ ] Add donation method w/ StripeJS
 - [ ] Listen to stripe webhooks and store new donations
+- [ ] Create method to check if there's new donations if application crash/stop working for each listener
 
 ## Frontend
 *Soon (in another repo :P)*
