@@ -4,7 +4,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import Event from '@modules/events/infra/typeorm/entities/Event';
 
 @Entity('donations')
 class Donation {
@@ -25,6 +28,13 @@ class Donation {
 
   @Column({ default: false })
   reviewed: boolean;
+
+  @Column()
+  event_id: string;
+
+  @ManyToOne(() => Event)
+  @JoinColumn({ name: 'event_id' })
+  event: Event;
 
   @CreateDateColumn()
   created_at: Date;
