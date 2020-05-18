@@ -37,7 +37,7 @@ describe('ReviewDonation', () => {
     ).rejects.toBeInstanceOf(HttpError);
   });
 
-  it('should be able to review the same donation twice', async () => {
+  it('should not be able to review the same donation twice', async () => {
     const donation = await saveNewDonation.execute({
       from: 'Donator',
       message: 'Donation Message',

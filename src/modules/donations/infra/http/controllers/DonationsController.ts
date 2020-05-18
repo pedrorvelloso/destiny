@@ -4,6 +4,7 @@ import {
   interfaces,
   httpGet,
   httpPatch,
+  response as responseHttp,
 } from 'inversify-express-utils';
 
 import ListAllDonationsService from '@modules/donations/services/ListAllDonationsService';
@@ -11,6 +12,7 @@ import ReviewDonationService from '@modules/donations/services/ReviewDonationSer
 import ListUnrevisedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import { container } from '@shared/container';
 import { EVENTS } from '@shared/infra/ws/events';
+import TotalDonationService from '@modules/donations/services/TotalDonationsService';
 
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
@@ -43,6 +45,17 @@ class DonationsController implements interfaces.Controller {
     const donations = await listUnrevisedDonations.execute();
 
     return response.json(donations);
+  }
+
+  @httpGet('/total')
+  public async getTotalDonations(
+    @responseHttp() response: Response,
+  ): Promise<Response> {
+    const totalDonations = container.resolve(TotalDonationService);
+
+    const total = await totalDonations.execute();
+
+    return response.json({ total });
   }
 
   @httpPatch('/review')

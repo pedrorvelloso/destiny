@@ -48,6 +48,20 @@ class DonationRepository implements IDonationRepository {
     return donation;
   }
 
+  public async total(): Promise<number> {
+    let total = 0;
+    const donations = await this.ormRepository.find({
+      select: ['amount'],
+      where: { reviewed: true },
+    });
+
+    donations.forEach(donation => {
+      total += donation.amount;
+    });
+
+    return total;
+  }
+
   public async all(): Promise<Donation[]> {
     const donations = this.ormRepository.find();
 
