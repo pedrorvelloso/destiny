@@ -40,7 +40,7 @@ describe('ListAllUnrevisedDonations', () => {
       source: 'SomeListener',
     });
 
-    await reviewDonation.execute({ donation_id: shouldBeReviewd._id });
+    await reviewDonation.execute({ donation_id: shouldBeReviewd.id });
 
     const donations = await listUnrevisedDonations.execute();
 

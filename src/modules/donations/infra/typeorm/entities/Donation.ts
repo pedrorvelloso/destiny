@@ -1,15 +1,15 @@
 import {
   Entity,
-  ObjectIdColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('donations')
 class Donation {
-  @ObjectIdColumn()
-  _id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column()
   from: string;

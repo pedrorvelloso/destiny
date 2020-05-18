@@ -6,7 +6,7 @@ import IDonationRepository from '../repositories/IDonationRepository';
 import Donation from '../infra/typeorm/entities/Donation';
 
 interface IRequest {
-  donation_id: string;
+  donation_id: number;
 }
 
 @injectable()

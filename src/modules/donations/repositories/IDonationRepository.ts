@@ -5,6 +5,6 @@ export default interface IDonationRepository {
   create(data: ICreateDonationDTO): Promise<Donation>;
   all(): Promise<Donation[]>;
   findByReviewedStatus(reviewed: boolean): Promise<Donation[]>;
-  findById(_id: string): Promise<Donation | undefined>;
+  findById(id: number): Promise<Donation | undefined>;
   save(donation: Donation): Promise<Donation>;
 }

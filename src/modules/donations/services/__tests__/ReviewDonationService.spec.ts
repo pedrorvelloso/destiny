@@ -25,7 +25,7 @@ describe('ReviewDonation', () => {
     expect(donation.reviewed).toBe(false);
 
     await reviewDonation.execute({
-      donation_id: donation._id,
+      donation_id: donation.id,
     });
 
     expect(donation.reviewed).toBe(true);
@@ -33,7 +33,7 @@ describe('ReviewDonation', () => {
 
   it('should not be able to review non-existing donation', async () => {
     await expect(
-      reviewDonation.execute({ donation_id: 'non-existing' }),
+      reviewDonation.execute({ donation_id: -1 }),
     ).rejects.toBeInstanceOf(HttpError);
   });
 
@@ -48,14 +48,14 @@ describe('ReviewDonation', () => {
     expect(donation.reviewed).toBe(false);
 
     await reviewDonation.execute({
-      donation_id: donation._id,
+      donation_id: donation.id,
     });
 
     expect(donation.reviewed).toBe(true);
 
     await expect(
       reviewDonation.execute({
-        donation_id: donation._id,
+        donation_id: donation.id,
       }),
     ).rejects.toBeInstanceOf(HttpError);
   });

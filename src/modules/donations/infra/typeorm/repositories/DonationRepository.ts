@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { getMongoRepository, MongoRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import IDonationRepository from '@modules/donations/repositories/IDonationRepository';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
 
@@ -7,14 +7,14 @@ import Donation from '../entities/Donation';
 
 @injectable()
 class DonationRepository implements IDonationRepository {
-  private ormRepository: MongoRepository<Donation>;
+  private ormRepository: Repository<Donation>;
 
   constructor() {
-    this.ormRepository = getMongoRepository(Donation);
+    this.ormRepository = getRepository(Donation);
   }
 
-  public async findById(_id: string): Promise<Donation | undefined> {
-    const donation = await this.ormRepository.findOne(_id);
+  public async findById(id: number): Promise<Donation | undefined> {
+    const donation = await this.ormRepository.findOne(id);
 
     return donation;
   }

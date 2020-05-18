@@ -21,8 +21,8 @@ class FakeDonationRepository implements IDonationRepository {
     return this.donations;
   }
 
-  public async findById(_id: string): Promise<Donation | undefined> {
-    const findDonation = this.donations.find(d => d._id === _id);
+  public async findById(id: number): Promise<Donation | undefined> {
+    const findDonation = this.donations.find(d => d.id === id);
 
     return findDonation;
   }
@@ -32,7 +32,7 @@ class FakeDonationRepository implements IDonationRepository {
   }
 
   public async save(donation: Donation): Promise<Donation> {
-    const findIndex = this.donations.findIndex(d => d._id === donation._id);
+    const findIndex = this.donations.findIndex(d => d.id === donation.id);
 
     this.donations[findIndex] = donation;
 
