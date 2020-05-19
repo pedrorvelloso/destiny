@@ -49,15 +49,11 @@ class DonationRepository implements IDonationRepository {
   }
 
   public async total(): Promise<number> {
-    let total = 0;
-    const donations = await this.ormRepository.find({
-      select: ['amount'],
-      where: { reviewed: true },
-    });
-
-    donations.forEach(donation => {
-      total += donation.amount;
-    });
+    const { total } = await this.ormRepository
+      .createQueryBuilder('donation')
+      .select('SUM(donation.amount) as TOTAL')
+      .where('donation.reviewed = :reviewed', { reviewed: true })
+      .getRawOne();
 
     return total;
   }
