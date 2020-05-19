@@ -6,7 +6,7 @@ import { container } from '@shared/container';
 
 import './routes';
 
-import HttpError from '@shared/errors/HttpError';
+import ApplicationError from '@shared/errors/ApplicationError';
 import { createWebsocket } from '../ws';
 
 const expressServer = express();
@@ -37,7 +37,7 @@ inversifyServer.setErrorConfig(application => {
       response: express.Response,
       _: express.NextFunction,
     ): Response => {
-      if (error instanceof HttpError) {
+      if (error instanceof ApplicationError) {
         return response.status(error.statusCode).json({
           status: 'error',
           message: error.message,

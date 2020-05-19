@@ -10,12 +10,13 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [x] Service to list unreviewed donations
 - [x] Service to review donations
 - [x] Send total/new reviewed donation when a new donation is reviewed
+- [x] Set up event (create, start, and finish event)
 - [ ] Store total donations in database
-- [ ] JWT
-- [ ] Add simple user system to ensure authentication when reviewing donation
+
 
 ## Beta
-- [ ] Set up event
+- [ ] JWT
+- [ ] Add simple user system to ensure authentication when reviewing donation
 - [ ] Set up event schedule
 - [ ] Donations incentives
 

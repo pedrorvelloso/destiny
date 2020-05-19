@@ -31,6 +31,34 @@ class EventsRepository implements IEventsRepository {
 
     return event;
   }
+
+  public async findById(event_id: string): Promise<Event | undefined> {
+    const event = this.ormRepository.findOne({
+      where: { id: event_id },
+    });
+
+    return event;
+  }
+
+  public async hasActiveEvent(): Promise<boolean> {
+    const checkActiveEvent = await this.ormRepository.findOne({
+      where: {
+        active: true,
+      },
+    });
+
+    return !!checkActiveEvent;
+  }
+
+  public async all(): Promise<Event[]> {
+    const events = await this.ormRepository.find();
+
+    return events;
+  }
+
+  public async save(event: Event): Promise<Event> {
+    return this.ormRepository.save(event);
+  }
 }
 
 export default EventsRepository;

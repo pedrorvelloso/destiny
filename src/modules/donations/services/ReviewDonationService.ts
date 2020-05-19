@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 
-import HttpError from '@shared/errors/HttpError';
+import ApplicationError from '@shared/errors/ApplicationError';
 
 import IDonationsRepository from '../repositories/IDonationsRepository';
 import Donation from '../infra/typeorm/entities/Donation';
@@ -20,7 +20,7 @@ class ReviewDonationService {
     const donation = await this.DonationsRepository.findById(donation_id);
 
     if (!donation || donation.reviewed)
-      throw new HttpError('Error reviewing donation');
+      throw new ApplicationError('Error reviewing donation');
 
     donation.reviewed = true;
 

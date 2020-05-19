@@ -1,5 +1,5 @@
 import FakeEventsRepository from '@modules/events/repositories/fakes/FakeEventsRespository';
-import HttpError from '@shared/errors/HttpError';
+import ApplicationError from '@shared/errors/ApplicationError';
 import CreateEventService from '../CreateEventService';
 
 let fakeEventsRepository: FakeEventsRepository;
@@ -37,7 +37,7 @@ describe('CreateEvent', () => {
         starts_at: new Date(2020, 1, 7, 12),
         ends_at: new Date(2020, 1, 6, 12),
       }),
-    ).rejects.toBeInstanceOf(HttpError);
+    ).rejects.toBeInstanceOf(ApplicationError);
   });
 
   it('should not be able to create event the same day it starts or before', async () => {
@@ -57,6 +57,6 @@ describe('CreateEvent', () => {
         starts_at: startDate,
         ends_at: endDate,
       }),
-    ).rejects.toBeInstanceOf(HttpError);
+    ).rejects.toBeInstanceOf(ApplicationError);
   });
 });

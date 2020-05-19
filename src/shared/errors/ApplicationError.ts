@@ -1,4 +1,4 @@
-class HttpError {
+class ApplicationError {
   public readonly message: string;
 
   public readonly statusCode: number;
@@ -9,4 +9,4 @@ class HttpError {
   }
 }
 
-export default HttpError;
+export default ApplicationError;

@@ -4,7 +4,7 @@ import {
   interfaces,
   httpGet,
   httpPatch,
-  response as responseHttp,
+  response,
 } from 'inversify-express-utils';
 
 import ListAllDonationsService from '@modules/donations/services/ListAllDonationsService';
@@ -22,21 +22,18 @@ class DonationsController implements interfaces.Controller {
   private total = 0;
 
   @httpGet('/')
-  public async getAllDonations(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
+  public async getAllDonations(req: Request, res: Response): Promise<Response> {
     const listAllDonations = container.resolve(ListAllDonationsService);
 
     const donations = await listAllDonations.execute();
 
-    return response.json(donations);
+    return res.json(donations);
   }
 
   @httpGet('/unreviewed')
   public async listUnrevisedDonations(
-    request: Request,
-    response: Response,
+    req: Request,
+    res: Response,
   ): Promise<Response> {
     const listUnrevisedDonations = container.resolve(
       ListUnrevisedDonationsService,
@@ -44,35 +41,30 @@ class DonationsController implements interfaces.Controller {
 
     const donations = await listUnrevisedDonations.execute();
 
-    return response.json(donations);
+    return res.json(donations);
   }
 
   @httpGet('/total')
-  public async getTotalDonations(
-    @responseHttp() response: Response,
-  ): Promise<Response> {
+  public async getTotalDonations(@response() res: Response): Promise<Response> {
     const totalDonations = container.resolve(TotalDonationService);
 
     const total = await totalDonations.execute();
 
-    return response.json({ total });
+    return res.json({ total });
   }
 
   @httpPatch('/review')
-  public async reviewDonation(
-    request: Request,
-    response: Response,
-  ): Promise<Response> {
-    const { donation_id } = request.body;
+  public async reviewDonation(req: Request, res: Response): Promise<Response> {
+    const { donation_id } = req.body;
     const reviewDonation = container.resolve(ReviewDonationService);
 
     const donation = await reviewDonation.execute({ donation_id });
 
     this.total += donation.amount;
-    request.ws.emit(EVENTS.TOTAL_DONATIONS, this.total);
-    request.ws.emit(EVENTS.NEW_REVIEWED_DONATION, donation);
+    req.ws.emit(EVENTS.TOTAL_DONATIONS, this.total);
+    req.ws.emit(EVENTS.NEW_REVIEWED_DONATION, donation);
 
-    return response.json(donation);
+    return res.json(donation);
   }
 }
 

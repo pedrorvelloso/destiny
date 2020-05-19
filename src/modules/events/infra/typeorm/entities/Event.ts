@@ -26,6 +26,9 @@ class Event {
   @Column('time with time zone')
   ends_at: Date;
 
+  @Column('time with time zone', { nullable: true })
+  ended_at: Date;
+
   @CreateDateColumn()
   created_at: Date;
 

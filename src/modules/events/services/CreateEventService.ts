@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { isAfter, differenceInDays } from 'date-fns';
 
-import HttpError from '@shared/errors/HttpError';
+import ApplicationError from '@shared/errors/ApplicationError';
 import Event from '../infra/typeorm/entities/Event';
 import IEventsRepository from '../repositories/IEventsRepository';
 
@@ -29,10 +29,10 @@ class CreateEventService {
     const isBeforeToday = differenceInDays(Date.now(), starts_at) >= 0;
 
     if (isEndAfterStart)
-      throw new HttpError('Start date should be before End Date');
+      throw new ApplicationError('Start date should be before End Date');
 
     if (isBeforeToday)
-      throw new HttpError(
+      throw new ApplicationError(
         'Cannont create event that starts today/before today',
       );
 
