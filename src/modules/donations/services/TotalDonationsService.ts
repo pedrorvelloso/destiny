@@ -1,15 +1,15 @@
 import { injectable, inject } from 'inversify';
-import IDonationRepository from '../repositories/IDonationRepository';
+import IDonationsRepository from '../repositories/IDonationsRepository';
 
 @injectable()
 class TotalDonationService {
   constructor(
-    @inject('DonationRepository')
-    private donationRepository: IDonationRepository,
+    @inject('DonationsRepository')
+    private DonationsRepository: IDonationsRepository,
   ) {}
 
   public async execute(): Promise<number> {
-    const total = this.donationRepository.total();
+    const total = this.DonationsRepository.total();
 
     return total;
   }

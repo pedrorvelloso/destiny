@@ -1,17 +1,17 @@
-import FakeDonationRepository from '@modules/donations/repositories/fakes/FakeDonationRepository';
+import FakeDonationsRepository from '@modules/donations/repositories/fakes/FakeDonationsRepository';
 import HttpError from '@shared/errors/HttpError';
 import SaveNewDonationService from '../SaveNewDonationService';
 import ReviewDonationService from '../ReviewDonationService';
 
-let fakeDonationRepository: FakeDonationRepository;
+let fakeDonationsRepository: FakeDonationsRepository;
 let reviewDonation: ReviewDonationService;
 let saveNewDonation: SaveNewDonationService;
 
 describe('ReviewDonation', () => {
   beforeEach(() => {
-    fakeDonationRepository = new FakeDonationRepository();
-    saveNewDonation = new SaveNewDonationService(fakeDonationRepository);
-    reviewDonation = new ReviewDonationService(fakeDonationRepository);
+    fakeDonationsRepository = new FakeDonationsRepository();
+    saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
+    reviewDonation = new ReviewDonationService(fakeDonationsRepository);
   });
 
   it('should be able to review donation', async () => {

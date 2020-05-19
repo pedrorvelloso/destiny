@@ -1,20 +1,20 @@
-import FakeDonationRepository from '../../repositories/fakes/FakeDonationRepository';
+import FakeDonationsRepository from '../../repositories/fakes/FakeDonationsRepository';
 import SaveNewDonationService from '../SaveNewDonationService';
 import ListUnrevisedDonationsService from '../ListUnreviewedDonationsService';
 import ReviewDonationService from '../ReviewDonationService';
 
-let fakeDonationRepository: FakeDonationRepository;
+let fakeDonationsRepository: FakeDonationsRepository;
 let listUnrevisedDonations: ListUnrevisedDonationsService;
 let reviewDonation: ReviewDonationService;
 let saveNewDonation: SaveNewDonationService;
 
 describe('ListAllUnrevisedDonations', () => {
   beforeEach(() => {
-    fakeDonationRepository = new FakeDonationRepository();
-    saveNewDonation = new SaveNewDonationService(fakeDonationRepository);
-    reviewDonation = new ReviewDonationService(fakeDonationRepository);
+    fakeDonationsRepository = new FakeDonationsRepository();
+    saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
+    reviewDonation = new ReviewDonationService(fakeDonationsRepository);
     listUnrevisedDonations = new ListUnrevisedDonationsService(
-      fakeDonationRepository,
+      fakeDonationsRepository,
     );
   });
 

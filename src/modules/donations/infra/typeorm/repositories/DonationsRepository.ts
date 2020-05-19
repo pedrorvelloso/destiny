@@ -1,12 +1,12 @@
 import { injectable } from 'inversify';
 import { getRepository, Repository } from 'typeorm';
-import IDonationRepository from '@modules/donations/repositories/IDonationRepository';
+import IDonationsRepository from '@modules/donations/repositories/IDonationsRepository';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
 
 import Donation from '../entities/Donation';
 
 @injectable()
-class DonationRepository implements IDonationRepository {
+class DonationsRepository implements IDonationsRepository {
   private ormRepository: Repository<Donation>;
 
   constructor() {
@@ -69,4 +69,4 @@ class DonationRepository implements IDonationRepository {
   }
 }
 
-export default DonationRepository;
+export default DonationsRepository;

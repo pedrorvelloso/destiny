@@ -1,19 +1,19 @@
-import FakeDonationRepository from '@modules/donations/repositories/fakes/FakeDonationRepository';
+import FakeDonationsRepository from '@modules/donations/repositories/fakes/FakeDonationsRepository';
 import SaveNewDonationService from '../SaveNewDonationService';
 import TotalDonationService from '../TotalDonationsService';
 import ReviewDonationService from '../ReviewDonationService';
 
-let fakeDonationRepository: FakeDonationRepository;
+let fakeDonationsRepository: FakeDonationsRepository;
 let totalDonations: TotalDonationService;
 let saveNewDonation: SaveNewDonationService;
 let reviewDonation: ReviewDonationService;
 
 describe('TotalDonations', () => {
   beforeEach(() => {
-    fakeDonationRepository = new FakeDonationRepository();
-    saveNewDonation = new SaveNewDonationService(fakeDonationRepository);
-    reviewDonation = new ReviewDonationService(fakeDonationRepository);
-    totalDonations = new TotalDonationService(fakeDonationRepository);
+    fakeDonationsRepository = new FakeDonationsRepository();
+    saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
+    reviewDonation = new ReviewDonationService(fakeDonationsRepository);
+    totalDonations = new TotalDonationService(fakeDonationsRepository);
   });
 
   it('should be able to fetch total reviewed donations number', async () => {

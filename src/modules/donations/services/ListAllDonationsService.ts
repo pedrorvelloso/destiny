@@ -1,16 +1,16 @@
 import { injectable, inject } from 'inversify';
-import IDonationRepository from '../repositories/IDonationRepository';
+import IDonationsRepository from '../repositories/IDonationsRepository';
 import Donation from '../infra/typeorm/entities/Donation';
 
 @injectable()
 class ListAllDonationsService {
   constructor(
-    @inject('DonationRepository')
-    private donationRepository: IDonationRepository,
+    @inject('DonationsRepository')
+    private DonationsRepository: IDonationsRepository,
   ) {}
 
   public async execute(): Promise<Donation[]> {
-    const donations = this.donationRepository.all();
+    const donations = this.DonationsRepository.all();
 
     return donations;
   }

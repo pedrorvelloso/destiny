@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import Donation from '../infra/typeorm/entities/Donation';
-import IDonationRepository from '../repositories/IDonationRepository';
+import IDonationsRepository from '../repositories/IDonationsRepository';
 
 interface IRequest {
   from: string;
@@ -12,8 +12,8 @@ interface IRequest {
 @injectable()
 class SaveNewDonationService {
   constructor(
-    @inject('DonationRepository')
-    private donationRepository: IDonationRepository,
+    @inject('DonationsRepository')
+    private DonationsRepository: IDonationsRepository,
   ) {}
 
   public async execute({
@@ -22,7 +22,7 @@ class SaveNewDonationService {
     amount,
     source,
   }: IRequest): Promise<Donation> {
-    const donation = await this.donationRepository.create({
+    const donation = await this.DonationsRepository.create({
       from,
       amount,
       message,

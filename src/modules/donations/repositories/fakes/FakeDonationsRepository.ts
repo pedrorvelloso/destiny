@@ -2,9 +2,9 @@ import { uuid } from 'uuidv4';
 
 import Donation from '@modules/donations/infra/typeorm/entities/Donation';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
-import IDonationRepository from '../IDonationRepository';
+import IDonationsRepository from '../IDonationsRepository';
 
-class FakeDonationRepository implements IDonationRepository {
+class FakeDonationsRepository implements IDonationsRepository {
   private donations: Donation[] = [];
 
   public async create(donationData: ICreateDonationDTO): Promise<Donation> {
@@ -49,4 +49,4 @@ class FakeDonationRepository implements IDonationRepository {
   }
 }
 
-export default FakeDonationRepository;
+export default FakeDonationsRepository;

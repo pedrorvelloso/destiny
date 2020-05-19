@@ -1,16 +1,16 @@
-import FakeDonationRepository from '@modules/donations/repositories/fakes/FakeDonationRepository';
+import FakeDonationsRepository from '@modules/donations/repositories/fakes/FakeDonationsRepository';
 import SaveNewDonationService from '../SaveNewDonationService';
 import ListAllDonationService from '../ListAllDonationsService';
 
-let fakeDonationRepository: FakeDonationRepository;
+let fakeDonationsRepository: FakeDonationsRepository;
 let listAllDonations: ListAllDonationService;
 let saveNewDonation: SaveNewDonationService;
 
 describe('ListAllDonations', () => {
   beforeEach(() => {
-    fakeDonationRepository = new FakeDonationRepository();
-    saveNewDonation = new SaveNewDonationService(fakeDonationRepository);
-    listAllDonations = new ListAllDonationService(fakeDonationRepository);
+    fakeDonationsRepository = new FakeDonationsRepository();
+    saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
+    listAllDonations = new ListAllDonationService(fakeDonationsRepository);
   });
 
   it('should be able to list all donations', async () => {

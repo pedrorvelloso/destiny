@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 
 import HttpError from '@shared/errors/HttpError';
 
-import IDonationRepository from '../repositories/IDonationRepository';
+import IDonationsRepository from '../repositories/IDonationsRepository';
 import Donation from '../infra/typeorm/entities/Donation';
 
 interface IRequest {
@@ -12,19 +12,19 @@ interface IRequest {
 @injectable()
 class ReviewDonationService {
   constructor(
-    @inject('DonationRepository')
-    private donationRepository: IDonationRepository,
+    @inject('DonationsRepository')
+    private DonationsRepository: IDonationsRepository,
   ) {}
 
   public async execute({ donation_id }: IRequest): Promise<Donation> {
-    const donation = await this.donationRepository.findById(donation_id);
+    const donation = await this.DonationsRepository.findById(donation_id);
 
     if (!donation || donation.reviewed)
       throw new HttpError('Error reviewing donation');
 
     donation.reviewed = true;
 
-    await this.donationRepository.save(donation);
+    await this.DonationsRepository.save(donation);
 
     return donation;
   }
