@@ -7,13 +7,14 @@ interface IRequest {
   message: string;
   amount: number;
   source: string;
+  event_id?: string;
 }
 
 @injectable()
 class SaveNewDonationService {
   constructor(
     @inject('DonationsRepository')
-    private DonationsRepository: IDonationsRepository,
+    private donationsRepository: IDonationsRepository,
   ) {}
 
   public async execute({
@@ -21,12 +22,14 @@ class SaveNewDonationService {
     message,
     amount,
     source,
+    event_id,
   }: IRequest): Promise<Donation> {
-    const donation = await this.DonationsRepository.create({
+    const donation = await this.donationsRepository.create({
       from,
       amount,
       message,
       source,
+      event_id,
     });
 
     return donation;

@@ -16,7 +16,7 @@ class StartEventService {
   ) {}
 
   public async execute({ event_id }: IRequest): Promise<Event> {
-    const hasActiveEvent = await this.eventsRepository.hasActiveEvent();
+    const hasActiveEvent = await this.eventsRepository.fetchActiveEvent();
 
     if (hasActiveEvent)
       throw new ApplicationError('There is already an event going on');

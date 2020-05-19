@@ -5,11 +5,11 @@ import IDonationsRepository from '../repositories/IDonationsRepository';
 class TotalDonationService {
   constructor(
     @inject('DonationsRepository')
-    private DonationsRepository: IDonationsRepository,
+    private donationsRepository: IDonationsRepository,
   ) {}
 
   public async execute(): Promise<number> {
-    const total = this.DonationsRepository.total();
+    const total = this.donationsRepository.total();
 
     return total;
   }

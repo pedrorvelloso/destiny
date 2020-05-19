@@ -37,8 +37,8 @@ class FakeEventsRepository implements IEventsRepository {
     return event;
   }
 
-  public async hasActiveEvent(): Promise<boolean> {
-    return !!this.events.find(event => event.active);
+  public async fetchActiveEvent(): Promise<Event | undefined> {
+    return this.events.find(event => event.active);
   }
 }
 

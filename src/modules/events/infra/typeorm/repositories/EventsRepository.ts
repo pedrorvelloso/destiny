@@ -40,14 +40,14 @@ class EventsRepository implements IEventsRepository {
     return event;
   }
 
-  public async hasActiveEvent(): Promise<boolean> {
-    const checkActiveEvent = await this.ormRepository.findOne({
+  public async fetchActiveEvent(): Promise<Event | undefined> {
+    const event = await this.ormRepository.findOne({
       where: {
         active: true,
       },
     });
 
-    return !!checkActiveEvent;
+    return event;
   }
 
   public async all(): Promise<Event[]> {

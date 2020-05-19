@@ -34,6 +34,7 @@ class DonationsRepository implements IDonationsRepository {
     amount,
     message,
     source,
+    event_id = null,
   }: ICreateDonationDTO): Promise<Donation> {
     const donation = this.ormRepository.create({
       from,
@@ -41,6 +42,7 @@ class DonationsRepository implements IDonationsRepository {
       message,
       source,
       reviewed: false,
+      event_id,
     });
 
     await this.ormRepository.save(donation);

@@ -7,5 +7,5 @@ export default interface IEventsRepository {
   create(data: ICreateEventDTO): Promise<Event>;
   all(): Promise<Event[]>;
   save(event: Event): Promise<Event>;
-  hasActiveEvent(): Promise<boolean>;
+  fetchActiveEvent(): Promise<Event | undefined>;
 }

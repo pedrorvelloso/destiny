@@ -6,11 +6,11 @@ import Donation from '../infra/typeorm/entities/Donation';
 class ListUnrevisedDonationsService {
   constructor(
     @inject('DonationsRepository')
-    private DonationsRepository: IDonationsRepository,
+    private donationsRepository: IDonationsRepository,
   ) {}
 
   public async execute(): Promise<Donation[]> {
-    const donations = this.DonationsRepository.findByReviewedStatus(false);
+    const donations = this.donationsRepository.findByReviewedStatus(false);
 
     return donations;
   }
