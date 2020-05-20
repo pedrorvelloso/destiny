@@ -30,6 +30,16 @@ class FakeDonationsRepository implements IDonationsRepository {
     return total;
   }
 
+  public async totalByEventId(event_id: string): Promise<number> {
+    let total = 0;
+    this.donations.forEach(donation => {
+      if (donation.reviewed && donation.event_id === event_id)
+        total += donation.amount;
+    });
+
+    return total;
+  }
+
   public async findById(id: number): Promise<Donation | undefined> {
     const findDonation = this.donations.find(d => d.id === id);
 
