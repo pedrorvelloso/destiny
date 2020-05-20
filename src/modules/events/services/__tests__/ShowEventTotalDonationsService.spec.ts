@@ -78,4 +78,19 @@ describe('ShowEventTotalDonations', () => {
       }),
     ).rejects.toBeInstanceOf(ApplicationError);
   });
+
+  it('should show 0 if there is no donations', async () => {
+    const event = await createEvent.execute({
+      name: 'Super Fast Event',
+      description: 'Super fast description',
+      starts_at: new Date(2020, 3, 15, 12),
+      ends_at: new Date(2020, 3, 20, 12),
+    });
+
+    const total = await showEventTotalDonations.execute({
+      event_id: event.id,
+    });
+
+    expect(total).toBe(0);
+  });
 });

@@ -20,7 +20,7 @@ class ShowEventTotalDonationsService {
   public async execute({ event_id }: IRequest): Promise<number> {
     const event = await this.eventsRepository.findById(event_id);
 
-    if (!event) throw new ApplicationError('Event does not exists');
+    if (!event) throw new ApplicationError('Event does not exists', 404);
 
     const total =
       (await this.donationsRepository.totalByEventId(event_id)) || 0;
