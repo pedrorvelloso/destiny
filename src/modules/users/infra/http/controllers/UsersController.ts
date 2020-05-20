@@ -10,6 +10,7 @@ import { Request, Response } from 'express';
 import { container } from '@shared/container';
 
 import CreateUserService from '@modules/users/services/CreateUserService';
+import { classToClass } from 'class-transformer';
 
 @controller('/users')
 class UsersController implements interfaces.Controller {
@@ -24,7 +25,7 @@ class UsersController implements interfaces.Controller {
 
     const user = await createUser.execute({ name, email, password });
 
-    return res.json(user);
+    return res.json({ user: classToClass(user) });
   }
 }
 
