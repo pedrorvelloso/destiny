@@ -5,6 +5,7 @@ import {
   httpGet,
   httpPatch,
   response,
+  request,
   requestParam,
 } from 'inversify-express-utils';
 
@@ -17,11 +18,6 @@ import TotalDonationService from '@modules/donations/services/TotalDonationsServ
 
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
-  /**
-   * @TODO store total in DB
-   */
-  private total = 0;
-
   @httpGet('/')
   public async getAllDonations(req: Request, res: Response): Promise<Response> {
     const listAllDonations = container.resolve(ListAllDonationsService);
@@ -54,16 +50,20 @@ class DonationsController implements interfaces.Controller {
     return res.json({ total });
   }
 
-  @httpPatch('/review')
-  public async reviewDonation(req: Request, res: Response): Promise<Response> {
-    const { donation_id } = req.body;
+  @httpPatch('/:id/review')
+  public async reviewDonation(
+    @request() req: Request,
+    @response() res: Response,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
     const reviewDonation = container.resolve(ReviewDonationService);
 
-    const donation = await reviewDonation.execute({ donation_id });
+    const donation = await reviewDonation.execute({ donation_id: id });
 
-    this.total += donation.amount;
-    req.ws.emit(EVENTS.TOTAL_DONATIONS, this.total);
-    req.ws.emit(EVENTS.NEW_REVIEWED_DONATION, donation);
+    req.ws.emit(
+      `${EVENTS.NEW_REVIEWED_DONATION}:${donation.event_id}`,
+      donation,
+    );
 
     return res.json(donation);
   }

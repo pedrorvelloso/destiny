@@ -12,6 +12,9 @@ module.exports = {
   "entities": [
     rootDir + "/modules/**/infra/typeorm/entities/*.{js,ts}"
   ],
+  "subscribers": [
+    rootDir + "/modules/**/infra/typeorm/subscribers/*.{js,ts}"
+  ],
   "migrations": [
     rootDir + "/shared/infra/typeorm/migrations/*.{js,ts}"
   ],
