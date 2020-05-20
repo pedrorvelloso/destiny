@@ -54,6 +54,8 @@ inversifyServer.setErrorConfig(application => {
 
 inversifyServer.build();
 
-httpServer.listen(3333, () => {
-  console.log('🚀 Listening on port 3333');
+const applicationPort = process.env.PORT || 3333;
+
+httpServer.listen(applicationPort, () => {
+  console.log(`🚀 Listening on port ${applicationPort}`);
 });

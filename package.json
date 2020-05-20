@@ -17,7 +17,7 @@
     "start:dev:debug": "ts-node-dev -r tsconfig-paths/register --transpileOnly --inspect --ignore-watch node_modules src/bootstrap.ts",
     "build": "tsc --project tsconfig.prod.json",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:create": "yarn typeorm migration:create",
+    "migration:create": "yarn typeorm migration:create -n",
     "migration:run": "yarn typeorm migration:run"
   },
   "dependencies": {
@@ -28,10 +28,9 @@
     "inversify-express-utils": "^6.3.2",
     "pg": "^8.2.1",
     "reflect-metadata": "^0.1.13",
-    "slugify": "^1.4.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
-    "typeorm": "^0.2.24",
+    "typeorm": "^0.2.25",
     "uuidv4": "^6.0.8"
   },
   "devDependencies": {
@@ -51,7 +50,7 @@
     "jest": "^26.0.1",
     "json-schema": "^0.2.5",
     "prettier": "^2.0.5",
-    "ts-jest": "^25.5.1",
+    "ts-jest": "^26.0.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.2"
