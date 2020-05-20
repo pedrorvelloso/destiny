@@ -5,11 +5,12 @@ import {
   httpGet,
   httpPatch,
   response,
+  requestParam,
 } from 'inversify-express-utils';
 
 import ListAllDonationsService from '@modules/donations/services/ListAllDonationsService';
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
-import ListUnrevisedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
+import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import { container } from '@shared/container';
 import { EVENTS } from '@shared/infra/ws/events';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
@@ -30,16 +31,16 @@ class DonationsController implements interfaces.Controller {
     return res.json(donations);
   }
 
-  @httpGet('/unreviewed')
-  public async listUnrevisedDonations(
-    req: Request,
-    res: Response,
+  @httpGet('/unreviewed/event/:event_id')
+  public async listUnreviewedDonations(
+    @response() res: Response,
+    @requestParam('event_id') event_id: string,
   ): Promise<Response> {
-    const listUnrevisedDonations = container.resolve(
-      ListUnrevisedDonationsService,
+    const listUnreviewedDonations = container.resolve(
+      ListUnreviewedDonationsService,
     );
 
-    const donations = await listUnrevisedDonations.execute();
+    const donations = await listUnreviewedDonations.execute({ event_id });
 
     return res.json(donations);
   }

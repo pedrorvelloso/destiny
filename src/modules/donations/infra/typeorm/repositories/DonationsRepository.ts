@@ -1,7 +1,9 @@
 import { injectable } from 'inversify';
 import { getRepository, Repository } from 'typeorm';
 import IDonationsRepository from '@modules/donations/repositories/IDonationsRepository';
+
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
+import IFindByReviewedStatusDTO from '@modules/donations/dtos/IFindByReviewedStatusDTO';
 
 import Donation from '../entities/Donation';
 
@@ -19,9 +21,13 @@ class DonationsRepository implements IDonationsRepository {
     return donation;
   }
 
-  public async findByReviewedStatus(reviewed: boolean): Promise<Donation[]> {
+  public async findByReviewedStatus({
+    event_id,
+    reviewed,
+  }: IFindByReviewedStatusDTO): Promise<Donation[]> {
     const donations = await this.ormRepository.find({
       where: {
+        event_id,
         reviewed,
       },
     });

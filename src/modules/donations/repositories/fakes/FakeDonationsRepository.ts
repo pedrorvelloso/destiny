@@ -2,6 +2,7 @@ import { uuid } from 'uuidv4';
 
 import Donation from '@modules/donations/infra/typeorm/entities/Donation';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
+import IFindByReviewedStatusDTO from '@modules/donations/dtos/IFindByReviewedStatusDTO';
 import IDonationsRepository from '../IDonationsRepository';
 
 class FakeDonationsRepository implements IDonationsRepository {
@@ -46,8 +47,14 @@ class FakeDonationsRepository implements IDonationsRepository {
     return findDonation;
   }
 
-  public async findByReviewedStatus(status: boolean): Promise<Donation[]> {
-    return this.donations.filter(donation => donation.reviewed === status);
+  public async findByReviewedStatus({
+    reviewed,
+    event_id,
+  }: IFindByReviewedStatusDTO): Promise<Donation[]> {
+    return this.donations.filter(
+      donation =>
+        donation.reviewed === reviewed && donation.event_id === event_id,
+    );
   }
 
   public async save(donation: Donation): Promise<Donation> {
