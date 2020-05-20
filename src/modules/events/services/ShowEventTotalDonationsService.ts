@@ -8,10 +8,6 @@ interface IRequest {
   event_id: string;
 }
 
-interface IResponse {
-  total: number;
-}
-
 @injectable()
 class ShowEventTotalDonationsService {
   constructor(
@@ -21,14 +17,15 @@ class ShowEventTotalDonationsService {
     private donationsRepository: IDonationsRepository,
   ) {}
 
-  public async execute({ event_id }: IRequest): Promise<IResponse> {
+  public async execute({ event_id }: IRequest): Promise<number> {
     const event = await this.eventsRepository.findById(event_id);
 
     if (!event) throw new ApplicationError('Event does not exists');
 
-    const total = await this.donationsRepository.totalByEventId(event_id);
+    const total =
+      (await this.donationsRepository.totalByEventId(event_id)) || 0;
 
-    return { total };
+    return total;
   }
 }
 

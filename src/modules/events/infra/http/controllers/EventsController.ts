@@ -17,6 +17,7 @@ import CreateEventService from '@modules/events/services/CreateEventService';
 import ListEventsService from '@modules/events/services/ListEventsService';
 import StartEventService from '@modules/events/services/StartEventService';
 import EndEventService from '@modules/events/services/EndEventService';
+import ShowEventTotalDonationsService from '@modules/events/services/ShowEventTotalDonationsService';
 
 @controller('/events')
 class EventsController implements interfaces.Controller {
@@ -73,6 +74,20 @@ class EventsController implements interfaces.Controller {
     const event = await endEvent.execute({ event_id });
 
     return res.json(event);
+  }
+
+  @httpGet('/:id/total')
+  public async eventTotal(
+    @requestParam('id') event_id: string,
+    @response() res: Response,
+  ): Promise<Response> {
+    const showEventTotalDonations = container.resolve(
+      ShowEventTotalDonationsService,
+    );
+
+    const total = await showEventTotalDonations.execute({ event_id });
+
+    return res.json({ total });
   }
 }
 

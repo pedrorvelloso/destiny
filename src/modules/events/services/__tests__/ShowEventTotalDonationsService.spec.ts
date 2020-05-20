@@ -64,7 +64,7 @@ describe('ShowEventTotalDonations', () => {
     await reviewDonation.execute({ donation_id: donation1.id });
     await reviewDonation.execute({ donation_id: donation2.id });
 
-    const { total } = await showEventTotalDonations.execute({
+    const total = await showEventTotalDonations.execute({
       event_id: event.id,
     });
 

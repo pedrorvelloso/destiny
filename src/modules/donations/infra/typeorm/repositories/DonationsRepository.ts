@@ -57,7 +57,7 @@ class DonationsRepository implements IDonationsRepository {
       .where('donation.reviewed = :reviewed', { reviewed: true })
       .getRawOne();
 
-    return total;
+    return parseInt(total, 10);
   }
 
   public async all(): Promise<Donation[]> {
@@ -68,6 +68,19 @@ class DonationsRepository implements IDonationsRepository {
 
   public async save(donation: Donation): Promise<Donation> {
     return this.ormRepository.save(donation);
+  }
+
+  public async totalByEventId(event_id: string): Promise<number> {
+    const { total } = await this.ormRepository
+      .createQueryBuilder('donation')
+      .select('SUM(donation.amount) as TOTAL')
+      .where('donation.reviewed = :reviewed AND event_id = :event_id', {
+        reviewed: true,
+        event_id,
+      })
+      .getRawOne();
+
+    return parseInt(total, 10);
   }
 }
 
