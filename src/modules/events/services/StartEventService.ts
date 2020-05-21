@@ -5,7 +5,7 @@ import Event from '../infra/typeorm/entities/Event';
 import IEventsRepository from '../repositories/IEventsRepository';
 
 interface IRequest {
-  event_id: string;
+  event_id: number;
 }
 
 @injectable()

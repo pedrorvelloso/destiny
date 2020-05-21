@@ -76,7 +76,7 @@ class DonationsRepository implements IDonationsRepository {
     return this.ormRepository.save(donation);
   }
 
-  public async totalByEventId(event_id: string): Promise<number> {
+  public async totalByEventId(event_id: number): Promise<number> {
     const { total } = await this.ormRepository
       .createQueryBuilder('donation')
       .select('SUM(donation.amount) as TOTAL')

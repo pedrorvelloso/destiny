@@ -5,7 +5,7 @@ import IEventsRepository from '../IEventsRepository';
 class FakeEventsRepository implements IEventsRepository {
   private events: Event[] = [];
 
-  public async findById(id: string): Promise<Event | undefined> {
+  public async findById(id: number): Promise<Event | undefined> {
     const findEvent = this.events.find(event => event.id === id);
 
     return findEvent;

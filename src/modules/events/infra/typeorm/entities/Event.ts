@@ -9,7 +9,7 @@ import {
 @Entity('events')
 class Event {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column()
   name: string;

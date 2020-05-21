@@ -52,7 +52,7 @@ class EventsController implements interfaces.Controller {
 
   @httpPatch('/:id/start', parameterIdValidation)
   public async startEvent(
-    @requestParam('id') event_id: string,
+    @requestParam('id') event_id: number,
     @response() res: Response,
   ): Promise<Response> {
     const startEvent = container.resolve(StartEventService);
@@ -64,7 +64,7 @@ class EventsController implements interfaces.Controller {
 
   @httpPatch('/:id/end', parameterIdValidation)
   public async endEvent(
-    @requestParam('id') event_id: string,
+    @requestParam('id') event_id: number,
     @response() res: Response,
   ): Promise<Response> {
     const endEvent = container.resolve(EndEventService);
@@ -76,7 +76,7 @@ class EventsController implements interfaces.Controller {
 
   @httpGet('/:id/total', parameterIdValidation)
   public async eventTotal(
-    @requestParam('id') event_id: string,
+    @requestParam('id') event_id: number,
     @response() res: Response,
   ): Promise<Response> {
     const showEventTotalDonations = container.resolve(

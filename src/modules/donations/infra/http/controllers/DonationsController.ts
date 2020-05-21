@@ -35,7 +35,7 @@ class DonationsController implements interfaces.Controller {
   @httpGet('/unreviewed/event/:event_id', parameterIdValidation)
   public async listUnreviewedDonations(
     @response() res: Response,
-    @requestParam('event_id') event_id: string,
+    @requestParam('event_id') event_id: number,
   ): Promise<Response> {
     const listUnreviewedDonations = container.resolve(
       ListUnreviewedDonationsService,

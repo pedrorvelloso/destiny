@@ -3,5 +3,5 @@ export default interface ICreateDonationDTO {
   message: string;
   amount: number;
   source: string;
-  event_id?: string | null;
+  event_id?: number | null;
 }

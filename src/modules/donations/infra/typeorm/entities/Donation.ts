@@ -30,7 +30,7 @@ class Donation {
   reviewed: boolean;
 
   @Column({ nullable: true })
-  event_id?: string | null;
+  event_id?: number | null;
 
   @ManyToOne(() => Event)
   @JoinColumn({ name: 'event_id' })

@@ -7,7 +7,7 @@ interface IRequest {
   message: string;
   amount: number;
   source: string;
-  event_id?: string;
+  event_id?: number;
 }
 
 @injectable()
