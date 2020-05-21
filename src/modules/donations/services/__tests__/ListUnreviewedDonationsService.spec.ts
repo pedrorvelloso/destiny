@@ -75,7 +75,7 @@ describe('ListAllUnrevisedDonations', () => {
 
   it('should not be able to list unreviewed from non-existing event', async () => {
     await expect(
-      listUnreviewedDonations.execute({ event_id: 'bad' }),
+      listUnreviewedDonations.execute({ event_id: -1 }),
     ).rejects.toBeInstanceOf(ApplicationError);
   });
 });

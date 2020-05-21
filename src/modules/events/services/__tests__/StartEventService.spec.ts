@@ -56,8 +56,8 @@ describe('StartEvent', () => {
   });
 
   it('should not be able to start a non-existing event', async () => {
-    await expect(
-      startEvent.execute({ event_id: 'bad' }),
-    ).rejects.toBeInstanceOf(ApplicationError);
+    await expect(startEvent.execute({ event_id: -1 })).rejects.toBeInstanceOf(
+      ApplicationError,
+    );
   });
 });

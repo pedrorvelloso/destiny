@@ -70,8 +70,8 @@ describe('EndEvent', () => {
   });
 
   it('should not be able to end event that not exists', async () => {
-    await expect(
-      endEvent.execute({ event_id: 'not-exists' }),
-    ).rejects.toBeInstanceOf(ApplicationError);
+    await expect(endEvent.execute({ event_id: -1 })).rejects.toBeInstanceOf(
+      ApplicationError,
+    );
   });
 });

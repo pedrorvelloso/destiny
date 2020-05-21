@@ -74,7 +74,7 @@ describe('ShowEventTotalDonations', () => {
   it('should not be able to show total donations if event doesnt exists', async () => {
     await expect(
       showEventTotalDonations.execute({
-        event_id: 'bad',
+        event_id: -1,
       }),
     ).rejects.toBeInstanceOf(ApplicationError);
   });
