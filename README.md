@@ -18,7 +18,7 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [x] Service to create user
 - [x] Implement JWT strategy (Authenticate Service & middleware)
 - [x] Middleware to ensure authentication
-- [ ] Validate requests inputs
+- [x] Validate requests inputs
 - [ ] Store who reviewed donation
 - [ ] Setup cache (Redis) for total donations (???)
 

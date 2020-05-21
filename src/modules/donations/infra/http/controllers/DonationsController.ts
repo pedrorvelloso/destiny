@@ -19,6 +19,8 @@ import ReviewDonationService from '@modules/donations/services/ReviewDonationSer
 import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
 
+import { parameterIdValidation } from '../validations';
+
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
   @httpGet('/')
@@ -30,7 +32,7 @@ class DonationsController implements interfaces.Controller {
     return res.json(donations);
   }
 
-  @httpGet('/unreviewed/event/:event_id')
+  @httpGet('/unreviewed/event/:event_id', parameterIdValidation)
   public async listUnreviewedDonations(
     @response() res: Response,
     @requestParam('event_id') event_id: string,
@@ -53,7 +55,7 @@ class DonationsController implements interfaces.Controller {
     return res.json({ total });
   }
 
-  @httpPatch('/:id/review', ensureAuthenticated)
+  @httpPatch('/:id/review', ensureAuthenticated, parameterIdValidation)
   public async reviewDonation(
     @request() req: Request,
     @response() res: Response,

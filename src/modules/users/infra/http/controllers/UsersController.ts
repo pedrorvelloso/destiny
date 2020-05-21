@@ -6,15 +6,17 @@ import {
   response,
 } from 'inversify-express-utils';
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
 
 import { container } from '@shared/container';
 
 import CreateUserService from '@modules/users/services/CreateUserService';
-import { classToClass } from 'class-transformer';
+
+import { createUserValidation } from '../validations';
 
 @controller('/users')
 class UsersController implements interfaces.Controller {
-  @httpPost('/')
+  @httpPost('/', createUserValidation)
   public async createUser(
     @request() req: Request,
     @response() res: Response,

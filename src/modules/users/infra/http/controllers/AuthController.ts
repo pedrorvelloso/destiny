@@ -11,10 +11,11 @@ import { classToClass } from 'class-transformer';
 import { container } from '@shared/container';
 
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
+import { authValidation } from '../validations';
 
 @controller('/auth')
 class AuthController implements interfaces.Controller {
-  @httpPost('/')
+  @httpPost('/', authValidation)
   public async createUser(
     @request() req: Request,
     @response() res: Response,

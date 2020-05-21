@@ -20,13 +20,13 @@ class Event {
   @Column({ default: false })
   active: boolean;
 
-  @Column('time with time zone')
+  @Column('timestamp with time zone')
   starts_at: Date;
 
-  @Column('time with time zone')
+  @Column('timestamp with time zone')
   ends_at: Date;
 
-  @Column('time with time zone', { nullable: true })
+  @Column('timestamp with time zone', { nullable: true })
   ended_at: Date;
 
   @CreateDateColumn()
