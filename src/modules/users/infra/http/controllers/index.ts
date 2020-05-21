@@ -1,1 +1,2 @@
 import './UsersController';
+import './AuthController';

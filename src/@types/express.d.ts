@@ -2,5 +2,8 @@
 declare namespace Express {
   export interface Request {
     ws: SocketIO.Server;
+    user: {
+      id: string;
+    };
   }
 }

@@ -9,11 +9,14 @@ import {
   requestParam,
 } from 'inversify-express-utils';
 
+import { container } from '@shared/container';
+import { EVENTS } from '@shared/infra/ws/events';
+
+import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+
 import ListAllDonationsService from '@modules/donations/services/ListAllDonationsService';
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
 import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
-import { container } from '@shared/container';
-import { EVENTS } from '@shared/infra/ws/events';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
 
 @controller('/donations')
@@ -50,7 +53,7 @@ class DonationsController implements interfaces.Controller {
     return res.json({ total });
   }
 
-  @httpPatch('/:id/review')
+  @httpPatch('/:id/review', ensureAuthenticated)
   public async reviewDonation(
     @request() req: Request,
     @response() res: Response,
