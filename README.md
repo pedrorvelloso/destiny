@@ -14,13 +14,13 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [x] Send total donation (per event) in websocket
 
 
-## Beta ⚠️
+## Beta ✔️
 - [x] Service to create user
 - [x] Implement JWT strategy (Authenticate Service & middleware)
 - [x] Middleware to ensure authentication
 - [x] Validate requests inputs
 - [x] Store who reviewed donation
-- [ ] Create Docker for production
+- [x] Create Docker for production
 
 ## Release 🔜
 - [ ] Set up Games
