@@ -3,9 +3,13 @@ import ApplicationError from '@shared/errors/ApplicationError';
 import SaveNewDonationService from '@modules/donations/services/SaveNewDonationService';
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
 import FakeDonationsRepository from '@modules/donations/repositories/fakes/FakeDonationsRepository';
-import CreateEventService from '../CreateEventService';
-import StartEventService from '../StartEventService';
+import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import User from '@modules/users/infra/typeorm/entities/User';
 import ShowEventTotalDonationsService from '../ShowEventTotalDonationsService';
+import StartEventService from '../StartEventService';
+import CreateEventService from '../CreateEventService';
 
 let fakeEventsRepository: FakeEventsRepository;
 let createEvent: CreateEventService;
@@ -14,19 +18,36 @@ let reviewDonation: ReviewDonationService;
 let fakeDonationRepository: FakeDonationsRepository;
 let startEvent: StartEventService;
 let showEventTotalDonations: ShowEventTotalDonationsService;
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
+let user: User;
 
 describe('ShowEventTotalDonations', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     fakeEventsRepository = new FakeEventsRepository();
     fakeDonationRepository = new FakeDonationsRepository();
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
     createEvent = new CreateEventService(fakeEventsRepository);
     startEvent = new StartEventService(fakeEventsRepository);
     saveNewDonation = new SaveNewDonationService(fakeDonationRepository);
-    reviewDonation = new ReviewDonationService(fakeDonationRepository);
+    reviewDonation = new ReviewDonationService(
+      fakeDonationRepository,
+      fakeUsersRepository,
+    );
     showEventTotalDonations = new ShowEventTotalDonationsService(
       fakeEventsRepository,
       fakeDonationRepository,
     );
+
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+
+    user = await createUser.execute({
+      name: 'User',
+      email: 'email@example.com',
+      password: '123456',
+    });
 
     jest.spyOn(Date, 'now').mockImplementation(() => {
       const customDate = new Date(2020, 1, 1, 12);
@@ -61,8 +82,14 @@ describe('ShowEventTotalDonations', () => {
       event_id: event.id,
     });
 
-    await reviewDonation.execute({ donation_id: donation1.id });
-    await reviewDonation.execute({ donation_id: donation2.id });
+    await reviewDonation.execute({
+      donation_id: donation1.id,
+      reviewer_id: user.id,
+    });
+    await reviewDonation.execute({
+      donation_id: donation2.id,
+      reviewer_id: user.id,
+    });
 
     const total = await showEventTotalDonations.execute({
       event_id: event.id,
