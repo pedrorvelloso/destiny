@@ -61,9 +61,14 @@ class DonationsController implements interfaces.Controller {
     @response() res: Response,
     @requestParam('id') id: number,
   ): Promise<Response> {
+    const { id: user_id } = req.user;
+
     const reviewDonation = container.resolve(ReviewDonationService);
 
-    const donation = await reviewDonation.execute({ donation_id: id });
+    const donation = await reviewDonation.execute({
+      donation_id: id,
+      reviewer_id: user_id,
+    });
 
     req.ws.emit(
       `${EVENTS.NEW_REVIEWED_DONATION}:${donation.event_id}`,
