@@ -32,10 +32,10 @@ class DonationsController implements interfaces.Controller {
     return res.json(donations);
   }
 
-  @httpGet('/unreviewed/event/:event_id', parameterIdValidation)
+  @httpGet('/unreviewed/event/:id', parameterIdValidation)
   public async listUnreviewedDonations(
     @response() res: Response,
-    @requestParam('event_id') event_id: number,
+    @requestParam('id') event_id: number,
   ): Promise<Response> {
     const listUnreviewedDonations = container.resolve(
       ListUnreviewedDonationsService,
