@@ -5,7 +5,7 @@ import ApplicationError from '@shared/errors/ApplicationError';
 import IEventsRepository from '../repositories/IEventsRepository';
 
 interface IRequest {
-  event_id: string;
+  event_id: number;
 }
 
 @injectable()

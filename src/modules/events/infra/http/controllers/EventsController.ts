@@ -9,7 +9,6 @@ import {
   requestParam,
 } from 'inversify-express-utils';
 import { Response, Request } from 'express';
-import { parseISO } from 'date-fns';
 
 import { container } from '@shared/container';
 
@@ -18,6 +17,8 @@ import ListEventsService from '@modules/events/services/ListEventsService';
 import StartEventService from '@modules/events/services/StartEventService';
 import EndEventService from '@modules/events/services/EndEventService';
 import ShowEventTotalDonationsService from '@modules/events/services/ShowEventTotalDonationsService';
+
+import { createEventValidation, parameterIdValidation } from '../validations';
 
 @controller('/events')
 class EventsController implements interfaces.Controller {
@@ -30,31 +31,28 @@ class EventsController implements interfaces.Controller {
     return res.json(events);
   }
 
-  @httpPost('/')
+  @httpPost('/', createEventValidation)
   public async createEvent(
     @response() res: Response,
     @request() req: Request,
   ): Promise<Response> {
     const { name, description, starts_at, ends_at } = req.body;
 
-    const startsAt = parseISO(starts_at);
-    const endsAt = parseISO(ends_at);
-
     const createEvent = container.resolve(CreateEventService);
 
     const event = await createEvent.execute({
       name,
       description,
-      starts_at: startsAt,
-      ends_at: endsAt,
+      starts_at,
+      ends_at,
     });
 
     return res.json(event);
   }
 
-  @httpPatch('/:id/start')
+  @httpPatch('/:id/start', parameterIdValidation)
   public async startEvent(
-    @requestParam('id') event_id: string,
+    @requestParam('id') event_id: number,
     @response() res: Response,
   ): Promise<Response> {
     const startEvent = container.resolve(StartEventService);
@@ -64,9 +62,9 @@ class EventsController implements interfaces.Controller {
     return res.json(event);
   }
 
-  @httpPatch('/:id/end')
+  @httpPatch('/:id/end', parameterIdValidation)
   public async endEvent(
-    @requestParam('id') event_id: string,
+    @requestParam('id') event_id: number,
     @response() res: Response,
   ): Promise<Response> {
     const endEvent = container.resolve(EndEventService);
@@ -76,9 +74,9 @@ class EventsController implements interfaces.Controller {
     return res.json(event);
   }
 
-  @httpGet('/:id/total')
+  @httpGet('/:id/total', parameterIdValidation)
   public async eventTotal(
-    @requestParam('id') event_id: string,
+    @requestParam('id') event_id: number,
     @response() res: Response,
   ): Promise<Response> {
     const showEventTotalDonations = container.resolve(

@@ -9,12 +9,17 @@ import {
   requestParam,
 } from 'inversify-express-utils';
 
+import { container } from '@shared/container';
+import { EVENTS } from '@shared/infra/ws/events';
+
+import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+
 import ListAllDonationsService from '@modules/donations/services/ListAllDonationsService';
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
 import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
-import { container } from '@shared/container';
-import { EVENTS } from '@shared/infra/ws/events';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
+
+import { parameterIdValidation } from '../validations';
 
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
@@ -27,10 +32,10 @@ class DonationsController implements interfaces.Controller {
     return res.json(donations);
   }
 
-  @httpGet('/unreviewed/event/:event_id')
+  @httpGet('/unreviewed/event/:id', parameterIdValidation)
   public async listUnreviewedDonations(
     @response() res: Response,
-    @requestParam('event_id') event_id: string,
+    @requestParam('id') event_id: number,
   ): Promise<Response> {
     const listUnreviewedDonations = container.resolve(
       ListUnreviewedDonationsService,
@@ -50,15 +55,20 @@ class DonationsController implements interfaces.Controller {
     return res.json({ total });
   }
 
-  @httpPatch('/:id/review')
+  @httpPatch('/:id/review', ensureAuthenticated, parameterIdValidation)
   public async reviewDonation(
     @request() req: Request,
     @response() res: Response,
     @requestParam('id') id: number,
   ): Promise<Response> {
+    const { id: user_id } = req.user;
+
     const reviewDonation = container.resolve(ReviewDonationService);
 
-    const donation = await reviewDonation.execute({ donation_id: id });
+    const donation = await reviewDonation.execute({
+      donation_id: id,
+      reviewer_id: user_id,
+    });
 
     req.ws.emit(
       `${EVENTS.NEW_REVIEWED_DONATION}:${donation.event_id}`,

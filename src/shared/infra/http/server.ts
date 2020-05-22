@@ -1,6 +1,9 @@
 import express, { Response } from 'express';
 import http from 'http';
 import { InversifyExpressServer } from 'inversify-express-utils';
+import cors from 'cors';
+
+import { errors } from 'celebrate';
 
 import { container } from '@shared/container';
 
@@ -22,6 +25,7 @@ const inversifyServer = new InversifyExpressServer(
 );
 
 inversifyServer.setConfig(application => {
+  application.use(cors());
   application.use(express.json());
   application.use((req, _, next) => {
     req.ws = websocket;
@@ -30,6 +34,7 @@ inversifyServer.setConfig(application => {
 });
 
 inversifyServer.setErrorConfig(application => {
+  application.use(errors());
   application.use(
     (
       error: Error,
@@ -54,6 +59,8 @@ inversifyServer.setErrorConfig(application => {
 
 inversifyServer.build();
 
-httpServer.listen(3333, () => {
-  console.log('🚀 Listening on port 3333');
+const applicationPort = process.env.PORT || 3333;
+
+httpServer.listen(applicationPort, () => {
+  console.log(`🚀 Listening on port ${applicationPort}`);
 });

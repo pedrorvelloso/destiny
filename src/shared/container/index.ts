@@ -1,17 +1,26 @@
 import { Container } from 'inversify';
 
+import { usersContainer } from '@modules/users/providers';
+
 import DonationsRepository from '@modules/donations/infra/typeorm/repositories/DonationsRepository';
 import IDonationsRepository from '@modules/donations/repositories/IDonationsRepository';
 
 import IEventsRepository from '@modules/events/repositories/IEventsRepository';
 import EventsRepository from '@modules/events/infra/typeorm/repositories/EventsRepository';
 
-const container = new Container({ defaultScope: 'Singleton' });
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
-container
+const indexContainer = new Container({ defaultScope: 'Singleton' });
+
+indexContainer
   .bind<IDonationsRepository>('DonationsRepository')
   .to(DonationsRepository);
 
-container.bind<IEventsRepository>('EventsRepository').to(EventsRepository);
+indexContainer.bind<IEventsRepository>('EventsRepository').to(EventsRepository);
+
+indexContainer.bind<IUsersRepository>('UsersRepository').to(UsersRepository);
+
+const container = Container.merge(indexContainer, usersContainer);
 
 export { container };

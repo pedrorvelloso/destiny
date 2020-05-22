@@ -1,5 +1,9 @@
 import ApplicationError from '@shared/errors/ApplicationError';
 import FakeEventsRepository from '@modules/events/repositories/fakes/FakeEventsRespository';
+import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
+import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import User from '@modules/users/infra/typeorm/entities/User';
 import CreateEventService from '@modules/events/services/CreateEventService';
 import FakeDonationsRepository from '../../repositories/fakes/FakeDonationsRepository';
 import SaveNewDonationService from '../SaveNewDonationService';
@@ -8,22 +12,38 @@ import ReviewDonationService from '../ReviewDonationService';
 
 let fakeDonationsRepository: FakeDonationsRepository;
 let fakeEventsRepository: FakeEventsRepository;
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
 let createEvent: CreateEventService;
 let listUnreviewedDonations: ListUnreviewedDonationsService;
 let reviewDonation: ReviewDonationService;
 let saveNewDonation: SaveNewDonationService;
+let createUser: CreateUserService;
+let user: User;
 
 describe('ListAllUnrevisedDonations', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     fakeDonationsRepository = new FakeDonationsRepository();
     fakeEventsRepository = new FakeEventsRepository();
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
     createEvent = new CreateEventService(fakeEventsRepository);
     saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
-    reviewDonation = new ReviewDonationService(fakeDonationsRepository);
+    reviewDonation = new ReviewDonationService(
+      fakeDonationsRepository,
+      fakeUsersRepository,
+    );
     listUnreviewedDonations = new ListUnreviewedDonationsService(
       fakeDonationsRepository,
       fakeEventsRepository,
     );
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+
+    user = await createUser.execute({
+      name: 'User',
+      email: 'email@example.com',
+      password: '123456',
+    });
   });
 
   it('should be able to list all unrevised donations', async () => {
@@ -64,7 +84,10 @@ describe('ListAllUnrevisedDonations', () => {
       event_id: event.id,
     });
 
-    await reviewDonation.execute({ donation_id: shouldBeReviewd.id });
+    await reviewDonation.execute({
+      donation_id: shouldBeReviewd.id,
+      reviewer_id: user.id,
+    });
 
     const donations = await listUnreviewedDonations.execute({
       event_id: event.id,
@@ -75,7 +98,7 @@ describe('ListAllUnrevisedDonations', () => {
 
   it('should not be able to list unreviewed from non-existing event', async () => {
     await expect(
-      listUnreviewedDonations.execute({ event_id: 'bad' }),
+      listUnreviewedDonations.execute({ event_id: -1 }),
     ).rejects.toBeInstanceOf(ApplicationError);
   });
 });

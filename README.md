@@ -14,16 +14,26 @@ Destiny is a *donation* tracker for speedruns/gaming charity events. In the futu
 - [x] Send total donation (per event) in websocket
 
 
-## Beta ⚠️
-- [ ] JWT
-- [ ] Add simple user system to ensure authentication when reviewing donation
-- [ ] Set up event schedule
-- [ ] Donations incentives
+## Beta ✔️
+- [x] Service to create user
+- [x] Implement JWT strategy (Authenticate Service & middleware)
+- [x] Middleware to ensure authentication
+- [x] Validate requests inputs
+- [x] Store who reviewed donation
+- [x] Create Docker for production
 
 ## Release 🔜
+- [ ] Set up Games
+- [ ] Set up event schedule
+- [ ] Donations incentives
+- [ ] Relation Donation <-> Incentive
+- [ ] Find way to deal with different currencies
+
+## Future 🌎
 - [ ] Add donation method w/ StripeJS
 - [ ] Listen to stripe webhooks and store new donations
 - [ ] Create method to check if there's new donations if application crash/stop working for each listener
+- [ ] Setup cache (Redis) for total donations (???)
 
 ## Frontend 🔜
 *Soon (in another repo :P)*

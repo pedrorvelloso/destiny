@@ -8,6 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import Event from '@modules/events/infra/typeorm/entities/Event';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 @Entity('donations')
 class Donation {
@@ -30,11 +31,18 @@ class Donation {
   reviewed: boolean;
 
   @Column({ nullable: true })
-  event_id?: string | null;
+  event_id?: number | null;
 
   @ManyToOne(() => Event)
   @JoinColumn({ name: 'event_id' })
   event: Event;
+
+  @Column()
+  reviewed_by: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'reviewed_by' })
+  reviewer: User;
 
   @CreateDateColumn()
   created_at: Date;

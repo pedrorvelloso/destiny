@@ -1,5 +1,3 @@
-import { uuid } from 'uuidv4';
-
 import Donation from '@modules/donations/infra/typeorm/entities/Donation';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
 import IFindByReviewedStatusDTO from '@modules/donations/dtos/IFindByReviewedStatusDTO';
@@ -11,7 +9,11 @@ class FakeDonationsRepository implements IDonationsRepository {
   public async create(donationData: ICreateDonationDTO): Promise<Donation> {
     const donation = new Donation();
 
-    Object.assign(donation, { id: uuid(), reviewed: false }, donationData);
+    Object.assign(
+      donation,
+      { id: this.donations.length + 1, reviewed: false },
+      donationData,
+    );
 
     this.donations.push(donation);
 
@@ -31,7 +33,7 @@ class FakeDonationsRepository implements IDonationsRepository {
     return total;
   }
 
-  public async totalByEventId(event_id: string): Promise<number> {
+  public async totalByEventId(event_id: number): Promise<number> {
     let total = 0;
     this.donations.forEach(donation => {
       if (donation.reviewed && donation.event_id === event_id)

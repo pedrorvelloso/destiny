@@ -8,5 +8,22 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: destiny
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DATABASE}
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - "3333:3333"
+    depends_on:
+      - db
+    command: ["yarn", "start:prod"]
+    environment:
+      - PORT=${PORT}
+      - STREAMLABS_TOKEN=${STREAMLABS_TOKEN}
+      - PG_HOST=db
+      - PG_PORT=${PG_PORT}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_DATABASE=${PG_DATABASE}
