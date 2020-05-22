@@ -1,0 +1,14 @@
+name: CI
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with: 
+        node-version: 12
+        
+    - run:  yarn yarn install --frozen-lockfile
+    - run:  yarn test
