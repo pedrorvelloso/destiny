@@ -17,6 +17,7 @@ import ListEventsService from '@modules/events/services/ListEventsService';
 import StartEventService from '@modules/events/services/StartEventService';
 import EndEventService from '@modules/events/services/EndEventService';
 import ShowEventTotalDonationsService from '@modules/events/services/ShowEventTotalDonationsService';
+import ShowActiveEventService from '@modules/events/services/ShowActiveEventService';
 
 import { createEventValidation, parameterIdValidation } from '../validations';
 
@@ -29,6 +30,15 @@ class EventsController implements interfaces.Controller {
     const events = await listEvents.execute();
 
     return res.json(events);
+  }
+
+  @httpGet('/active')
+  public async getActiveEvent(@response() res: Response): Promise<Response> {
+    const showActiveEvent = container.resolve(ShowActiveEventService);
+
+    const event = await showActiveEvent.execute();
+
+    return res.json(event);
   }
 
   @httpPost('/', createEventValidation)
