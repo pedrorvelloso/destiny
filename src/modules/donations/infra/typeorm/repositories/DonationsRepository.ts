@@ -67,7 +67,12 @@ class DonationsRepository implements IDonationsRepository {
   }
 
   public async all(): Promise<Donation[]> {
-    const donations = this.ormRepository.find();
+    const donations = await this.ormRepository
+      .createQueryBuilder('donations')
+      .select(['donations', 'user.name'])
+      .leftJoin('donations.reviewer', 'user')
+      .orderBy('donations.created_at', 'DESC')
+      .getMany();
 
     return donations;
   }
