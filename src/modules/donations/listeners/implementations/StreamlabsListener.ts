@@ -56,7 +56,10 @@ class StreamlabsListener implements IDonationListener {
               event_id: activeEvent.id,
             });
 
-            websocket.emit(EVENTS.NEW_DONATION, donation);
+            websocket.emit(
+              `${EVENTS.NEW_DONATION}:${donation.event_id}`,
+              donation,
+            );
           });
         }
       }
