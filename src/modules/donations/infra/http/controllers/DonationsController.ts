@@ -10,6 +10,7 @@ import {
 } from 'inversify-express-utils';
 
 import { container } from '@shared/container';
+import { EVENTS } from '@shared/infra/ws/events';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 
@@ -68,6 +69,11 @@ class DonationsController implements interfaces.Controller {
       donation_id: id,
       reviewer_id: user_id,
     });
+
+    req.ws.emit(
+      `${EVENTS.NEW_REVIEWED_DONATION}:${donation.event_id}`,
+      donation,
+    );
 
     return res.json(donation);
   }

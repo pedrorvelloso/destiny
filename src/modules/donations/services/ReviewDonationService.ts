@@ -3,6 +3,7 @@ import { injectable, inject } from 'inversify';
 import ApplicationError from '@shared/errors/ApplicationError';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import User from '@modules/users/infra/typeorm/entities/User';
 import IDonationsRepository from '../repositories/IDonationsRepository';
 import Donation from '../infra/typeorm/entities/Donation';
 
@@ -37,6 +38,8 @@ class ReviewDonationService {
     donation.reviewed_by = user.id;
 
     await this.donationsRepository.save(donation);
+
+    donation.reviewer = { name: user.name } as User;
 
     return donation;
   }
