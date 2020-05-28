@@ -43,6 +43,14 @@ class FakeDonationsRepository implements IDonationsRepository {
     return total;
   }
 
+  public async findByEventId(event_id: number): Promise<Donation[]> {
+    const donations = this.donations.filter(
+      donation => donation.event_id === event_id,
+    );
+
+    return donations;
+  }
+
   public async findById(id: number): Promise<Donation | undefined> {
     const findDonation = this.donations.find(d => d.id === id);
 

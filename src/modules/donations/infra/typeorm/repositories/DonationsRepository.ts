@@ -93,6 +93,16 @@ class DonationsRepository implements IDonationsRepository {
 
     return parseInt(total, 10);
   }
+
+  public async findByEventId(event_id: number): Promise<Donation[]> {
+    const donations = this.ormRepository.find({
+      where: {
+        event_id,
+      },
+    });
+
+    return donations;
+  }
 }
 
 export default DonationsRepository;

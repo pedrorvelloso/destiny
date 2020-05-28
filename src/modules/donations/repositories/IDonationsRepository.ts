@@ -9,5 +9,6 @@ export default interface IDonationsRepository {
   totalByEventId(event_id: number): Promise<number>;
   findByReviewedStatus(data: IFindByReviewedStatusDTO): Promise<Donation[]>;
   findById(id: number): Promise<Donation | undefined>;
+  findByEventId(event_id: number): Promise<Donation[]>;
   save(donation: Donation): Promise<Donation>;
 }

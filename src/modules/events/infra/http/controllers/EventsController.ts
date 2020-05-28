@@ -18,6 +18,7 @@ import StartEventService from '@modules/events/services/StartEventService';
 import EndEventService from '@modules/events/services/EndEventService';
 import ShowEventTotalDonationsService from '@modules/events/services/ShowEventTotalDonationsService';
 import ShowActiveEventService from '@modules/events/services/ShowActiveEventService';
+import ListAllEventDonationsService from '@modules/events/services/ListAllEventDonationsService';
 
 import { createEventValidation, parameterIdValidation } from '../validations';
 
@@ -96,6 +97,20 @@ class EventsController implements interfaces.Controller {
     const total = await showEventTotalDonations.execute({ event_id });
 
     return res.json({ total });
+  }
+
+  @httpGet('/:id/donations', parameterIdValidation)
+  public async eventDonations(
+    @requestParam('id') event_id: number,
+    @response() res: Response,
+  ): Promise<Response> {
+    const listAllEventDonations = container.resolve(
+      ListAllEventDonationsService,
+    );
+
+    const donations = await listAllEventDonations.execute({ event_id });
+
+    return res.json(donations);
   }
 }
 
