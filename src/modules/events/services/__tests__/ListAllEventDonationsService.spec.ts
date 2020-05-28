@@ -29,7 +29,7 @@ describe('ListAllEventDonations', () => {
     });
   });
 
-  it('should be able to show total donations from active event', async () => {
+  it('should be able to show donations from active event', async () => {
     const event = await createEvent.execute({
       name: 'Super Fast Event',
       description: 'Super fast description',
@@ -53,14 +53,62 @@ describe('ListAllEventDonations', () => {
       event_id: event.id,
     });
 
-    const donations = await listAllEventDonations.execute({
+    const { donations } = await listAllEventDonations.execute({
       event_id: event.id,
     });
 
     expect(donations.length).toBe(2);
   });
 
-  it('should not be able to show total donations if event doesnt exists', async () => {
+  it('should be able to paginate donations from active event', async () => {
+    const event = await createEvent.execute({
+      name: 'Super Fast Event',
+      description: 'Super fast description',
+      starts_at: new Date(2020, 3, 15, 12),
+      ends_at: new Date(2020, 3, 20, 12),
+    });
+
+    await saveNewDonation.execute({
+      from: 'Donator',
+      message: 'Nice Message!',
+      amount: 10,
+      source: 'Source',
+      event_id: event.id,
+    });
+
+    const { id: cursor } = await saveNewDonation.execute({
+      from: 'Donator 2',
+      message: 'Nice Message!',
+      amount: 10,
+      source: 'Source',
+      event_id: event.id,
+    });
+
+    const response = await listAllEventDonations.execute({
+      event_id: event.id,
+      pagination: {
+        limit: 1,
+      },
+    });
+
+    expect(response.donations.length).toBe(1);
+    expect(response.donations[0].from).toBe('Donator 2');
+    expect(response.hasNextPage).toBe(true);
+
+    const response2 = await listAllEventDonations.execute({
+      event_id: event.id,
+      pagination: {
+        limit: 1,
+        cursor,
+      },
+    });
+
+    expect(response2.donations.length).toBe(1);
+    expect(response2.donations[0].from).toBe('Donator');
+    expect(response2.hasNextPage).toBe(false);
+  });
+
+  it('should not be able to show donations if event doesnt exists', async () => {
     await expect(
       listAllEventDonations.execute({
         event_id: -1,

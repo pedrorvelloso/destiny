@@ -7,6 +7,7 @@ import {
   request,
   httpPatch,
   requestParam,
+  queryParam,
 } from 'inversify-express-utils';
 import { Response, Request } from 'express';
 
@@ -103,12 +104,17 @@ class EventsController implements interfaces.Controller {
   public async eventDonations(
     @requestParam('id') event_id: number,
     @response() res: Response,
+    @queryParam('limit') limit: number,
+    @queryParam('cursor') cursor?: number,
   ): Promise<Response> {
     const listAllEventDonations = container.resolve(
       ListAllEventDonationsService,
     );
 
-    const donations = await listAllEventDonations.execute({ event_id });
+    const donations = await listAllEventDonations.execute({
+      event_id,
+      pagination: { limit, cursor },
+    });
 
     return res.json(donations);
   }

@@ -1,6 +1,7 @@
 import Donation from '@modules/donations/infra/typeorm/entities/Donation';
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
 import IFindByReviewedStatusDTO from '@modules/donations/dtos/IFindByReviewedStatusDTO';
+import IFindByEventIdDTO from '@modules/donations/dtos/IFindByEventIdDTO';
 import IDonationsRepository from '../IDonationsRepository';
 
 class FakeDonationsRepository implements IDonationsRepository {
@@ -43,10 +44,28 @@ class FakeDonationsRepository implements IDonationsRepository {
     return total;
   }
 
-  public async findByEventId(event_id: number): Promise<Donation[]> {
-    const donations = this.donations.filter(
-      donation => donation.event_id === event_id,
-    );
+  public async findByEventId({
+    event_id,
+    pagination,
+  }: IFindByEventIdDTO): Promise<Donation[]> {
+    let donations: Donation[] = [];
+    const orderedDonations = [...this.donations];
+    orderedDonations.reverse();
+
+    if (pagination) {
+      const findIndex = pagination.cursor
+        ? orderedDonations.findIndex(d => d.id === pagination.cursor) + 1
+        : 0;
+
+      donations = orderedDonations.slice(
+        findIndex,
+        findIndex + pagination.limit,
+      );
+    } else {
+      donations = orderedDonations.filter(
+        donation => donation.event_id === event_id,
+      );
+    }
 
     return donations;
   }

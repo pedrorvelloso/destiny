@@ -1,6 +1,7 @@
 import Donation from '../infra/typeorm/entities/Donation';
 import ICreateDonationDTO from '../dtos/ICreateDonationDTO';
 import IFindByReviewedStatusDTO from '../dtos/IFindByReviewedStatusDTO';
+import IFindByEventIdDTO from '../dtos/IFindByEventIdDTO';
 
 export default interface IDonationsRepository {
   create(data: ICreateDonationDTO): Promise<Donation>;
@@ -9,6 +10,6 @@ export default interface IDonationsRepository {
   totalByEventId(event_id: number): Promise<number>;
   findByReviewedStatus(data: IFindByReviewedStatusDTO): Promise<Donation[]>;
   findById(id: number): Promise<Donation | undefined>;
-  findByEventId(event_id: number): Promise<Donation[]>;
+  findByEventId(data: IFindByEventIdDTO): Promise<Donation[]>;
   save(donation: Donation): Promise<Donation>;
 }
