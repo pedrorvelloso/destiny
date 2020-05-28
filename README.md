@@ -1,39 +1,72 @@
 # Destiny
 
-Destiny is a *donation* tracker for speedruns/gaming charity events. In the future I'll also include features to hold donations incentives and create events with schedule
+Destiny is a donation tracker for speedruns/gaming charity events. In the future I'll also include features to hold donations incentives and create events with schedule
 
-## MVP - server (with StreamLabs) ✔️
-- [x] StreamLabs listener (with socket.io-client)
-- [x] Express server with Inversify
-- [x] Service to store new donations from StreamLabs
-- [x] Service to list all donations
-- [x] Service to list unreviewed donations
-- [x] Service to review donations
-- [x] Send total/new reviewed donation when a new donation is reviewed
-- [x] Set up event (create, start, and finish event)
-- [x] Send total donation (per event) in websocket
+## Development
 
+To start developing install dependencies, start DB docker and set environment variables
 
-## Beta ✔️
-- [x] Service to create user
-- [x] Implement JWT strategy (Authenticate Service & middleware)
-- [x] Middleware to ensure authentication
-- [x] Validate requests inputs
-- [x] Store who reviewed donation
-- [x] Create Docker for production
+```sh
+# install dependencies
+yarn
 
-## Release 🔜
-- [ ] Set up Games
-- [ ] Set up event schedule
-- [ ] Donations incentives
-- [ ] Relation Donation <-> Incentive
-- [ ] Find way to deal with different currencies
+# start docker db
+docker-compose up db
 
-## Future 🌎
-- [ ] Add donation method w/ StripeJS
-- [ ] Listen to stripe webhooks and store new donations
-- [ ] Create method to check if there's new donations if application crash/stop working for each listener
-- [ ] Setup cache (Redis) for total donations (???)
+# set env file
+cp .env.example .env
+```
 
-## Frontend 🔜
-*Soon (in another repo :P)*
+Then start development server
+
+```sh
+yarn start:dev
+
+# if you want to run with debug
+yarn start:dev:debug
+```
+
+If it's all good you should see the following output
+```sh
+🚀 Listening on port 3333
+🔉 Listening Streamlabs
+```
+
+Server now should be listening at `http://localhost:3333` (or .env port you set)
+
+## Tests
+
+All server Services should be tested. To run tests run `yarn test`
+
+## Deploy
+
+You can build everything with `yarn build` and deploy wherever you want
+
+### Docker
+
+If you want to use Docker you can build the `Dockerfile` or run `docker-compose.yml`.
+
+```sh
+# running with docker-compose.yml
+docker-compose build app
+
+docker-compose up -d # this will also start db service :)
+```
+
+## Folder structure
+```sh
+.
++-- src
+|   +-- @types # server types
+|   +-- config # general configuration
+|   +-- modules # server modules by domain
+|       +-- donations [module] # donation module (or every other module)
+|           +-- dtos # Data transfer objects interface definition
+|           +-- infra # Any 3rd party implementation
+|           +-- repositories # Interface daclaration for object repositories
+|               +-- fakes # Fake repositories (test purpose)
+|           +-- services # Buissness logic implementation
+|   +-- shared # server shared modules by domain
+|   +-- bootstrap.ts # server startup
+```
+
