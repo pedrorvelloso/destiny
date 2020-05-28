@@ -95,11 +95,13 @@ class DonationsRepository implements IDonationsRepository {
   }
 
   public async findByEventId(event_id: number): Promise<Donation[]> {
-    const donations = this.ormRepository.find({
-      where: {
-        event_id,
-      },
-    });
+    const donations = await this.ormRepository
+      .createQueryBuilder('donations')
+      .select(['donations', 'user.name'])
+      .leftJoin('donations.reviewer', 'user')
+      .orderBy('donations.created_at', 'DESC')
+      .where('donations.event_id = :event_id', { event_id })
+      .getMany();
 
     return donations;
   }
