@@ -1,6 +1,7 @@
-import { Container } from 'inversify';
+import { ContainerModule, interfaces, Container } from 'inversify';
 
 import { usersContainer } from '@modules/users/providers';
+import { gamesContainer } from '@modules/games/providers';
 
 import DonationsRepository from '@modules/donations/infra/typeorm/repositories/DonationsRepository';
 import IDonationsRepository from '@modules/donations/repositories/IDonationsRepository';
@@ -11,16 +12,21 @@ import EventsRepository from '@modules/events/infra/typeorm/repositories/EventsR
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
-const indexContainer = new Container({ defaultScope: 'Singleton' });
+const indexContainer = new ContainerModule(
+  (bind: interfaces.Bind, _: interfaces.Unbind) => {
+    bind<IDonationsRepository>('DonationsRepository')
+      .to(DonationsRepository)
+      .inSingletonScope();
+    bind<IEventsRepository>('EventsRepository')
+      .to(EventsRepository)
+      .inSingletonScope();
+    bind<IUsersRepository>('UsersRepository')
+      .to(UsersRepository)
+      .inSingletonScope();
+  },
+);
 
-indexContainer
-  .bind<IDonationsRepository>('DonationsRepository')
-  .to(DonationsRepository);
-
-indexContainer.bind<IEventsRepository>('EventsRepository').to(EventsRepository);
-
-indexContainer.bind<IUsersRepository>('UsersRepository').to(UsersRepository);
-
-const container = Container.merge(indexContainer, usersContainer);
+const container = new Container();
+container.load(indexContainer, usersContainer, gamesContainer);
 
 export { container };
