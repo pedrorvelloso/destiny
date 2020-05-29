@@ -1,6 +1,6 @@
+import ISearchDTO from '@shared/dtos/ISearchDTO';
 import Game from '@modules/games/infra/typeorm/entities/Game';
 import ICreateGameDTO from '@modules/games/dtos/ICreateGameDTO';
-import ISearchGameDTO from '@modules/games/dtos/ISearchGameDTO';
 import IGamesRepository from '../IGamesRepository';
 
 class FakeGamesRepository implements IGamesRepository {
@@ -14,7 +14,7 @@ class FakeGamesRepository implements IGamesRepository {
     return this.games.find(game => game.name === name);
   }
 
-  public async search({ input, limit }: ISearchGameDTO): Promise<Game[]> {
+  public async search({ input, limit }: ISearchDTO): Promise<Game[]> {
     const findGames = (input
       ? this.games.filter(game => game.name.includes(input))
       : [...this.games]
@@ -26,7 +26,7 @@ class FakeGamesRepository implements IGamesRepository {
   public async create(gameData: ICreateGameDTO): Promise<Game> {
     const game = new Game();
 
-    Object.assign(game, { id: this.games.length + 1, active: false }, gameData);
+    Object.assign(game, { id: this.games.length + 1 }, gameData);
 
     this.games.push(game);
 

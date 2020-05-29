@@ -5,7 +5,7 @@ import Game from '@modules/games/infra/typeorm/entities/Game';
 
 import ICreateGameDTO from '@modules/games/dtos/ICreateGameDTO';
 import IGamesRepository from '@modules/games/repositories/IGamesRepository';
-import ISearchGameDTO from '@modules/games/dtos/ISearchGameDTO';
+import ISearchDTO from '@shared/dtos/ISearchDTO';
 
 @injectable()
 class GamesRepository implements IGamesRepository {
@@ -23,7 +23,7 @@ class GamesRepository implements IGamesRepository {
     return this.ormRepository.findOne({ where: { name } });
   }
 
-  public async search({ input, limit = 5 }: ISearchGameDTO): Promise<Game[]> {
+  public async search({ input, limit = 5 }: ISearchDTO): Promise<Game[]> {
     const where = input ? { name: Like(`%${input}%`) } : {};
     return this.ormRepository.find({
       where,
