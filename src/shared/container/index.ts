@@ -2,6 +2,7 @@ import { ContainerModule, interfaces, Container } from 'inversify';
 
 import { usersContainer } from '@modules/users/providers';
 import { gamesContainer } from '@modules/games/providers';
+import incentivesContainer from '@modules/incentives/providers';
 
 import DonationsRepository from '@modules/donations/infra/typeorm/repositories/DonationsRepository';
 import IDonationsRepository from '@modules/donations/repositories/IDonationsRepository';
@@ -27,6 +28,11 @@ const indexContainer = new ContainerModule(
 );
 
 const container = new Container();
-container.load(indexContainer, usersContainer, gamesContainer);
+container.load(
+  indexContainer,
+  usersContainer,
+  gamesContainer,
+  incentivesContainer,
+);
 
 export { container };

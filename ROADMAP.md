@@ -19,10 +19,11 @@
 - [x] Create Docker for production
 
 ## Release 🔜
-- [ ] Pagination
-- [ ] Set up Games
+- [x] Pagination
+- [x] Set up Games
 - [ ] Donations incentives
 - [ ] Relation Donation <-> Incentive
+- [ ] Set up test db factory
 
 ## Future 🌎
 - [ ] Find way to deal with different currencies
