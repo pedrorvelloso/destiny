@@ -34,6 +34,10 @@ class IncentiveOptionsRepository implements IIncentiveOptionsRepository {
 
     return created;
   }
+
+  public async findById(id: number): Promise<IncentiveOption | undefined> {
+    return this.ormRepository.findOne(id);
+  }
 }
 
 export default IncentiveOptionsRepository;

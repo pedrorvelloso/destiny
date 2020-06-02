@@ -7,4 +7,5 @@ export default interface IIncentivesRepository {
   findById(id: number): Promise<Incentive | undefined>;
   findByName(name: string): Promise<Incentive | undefined>;
   search(data: ISearchDTO): Promise<Incentive[]>;
+  save(incentive: Incentive): Promise<Incentive>;
 }

@@ -36,6 +36,10 @@ class IncentivesRepository implements IIncentivesRepository {
 
     return this.ormRepository.save(incentive);
   }
+
+  public async save(incentive: Incentive): Promise<Incentive> {
+    return this.ormRepository.save(incentive);
+  }
 }
 
 export default IncentivesRepository;

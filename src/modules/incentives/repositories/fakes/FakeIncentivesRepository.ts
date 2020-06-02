@@ -32,6 +32,14 @@ class FakeIncentivesRepository implements IIncentivesRepository {
 
     return incentive;
   }
+
+  public async save(incentive: Incentive): Promise<Incentive> {
+    const findIndex = this.incentives.findIndex(i => i.id === incentive.id);
+
+    this.incentives[findIndex] = incentive;
+
+    return incentive;
+  }
 }
 
 export default FakeIncentivesRepository;

@@ -5,6 +5,12 @@ import IIncentiveOptionsRepository from '../IIncentiveOptionsRepository';
 class FakeIncentiveOptionsRepository implements IIncentiveOptionsRepository {
   private incentive_options: IncentiveOption[] = [];
 
+  public async findById(id: number): Promise<IncentiveOption | undefined> {
+    return this.incentive_options.find(
+      incentiveOption => incentiveOption.id === id,
+    );
+  }
+
   public async create(
     incentiveOptionData: ICreateIncentiveOptionDTO,
   ): Promise<IncentiveOption> {
