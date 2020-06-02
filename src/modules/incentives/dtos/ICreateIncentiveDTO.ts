@@ -8,5 +8,5 @@ export default interface ICreateIncentiveDTO {
   event_id: number;
   type: IIncentiveType;
   enable_option: boolean;
-  meta?: number;
+  goal?: number;
 }

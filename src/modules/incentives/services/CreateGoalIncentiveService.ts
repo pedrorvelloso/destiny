@@ -13,11 +13,11 @@ interface IRequest {
   user_id: string;
   event_id: number;
   game_id: number;
-  meta: number;
+  goal: number;
 }
 
 @injectable()
-class CreateMetaIncentiveService {
+class CreateGoalIncentiveService {
   constructor(
     @inject('IncentivesRepository')
     private incentivesRepository: IIncentivesRepository,
@@ -37,7 +37,7 @@ class CreateMetaIncentiveService {
     user_id,
     event_id,
     game_id,
-    meta,
+    goal,
   }: IRequest): Promise<Incentive> {
     const checkEventExists = await this.eventsRepository.findById(event_id);
     const checkGameExists = await this.gamesRepository.findById(game_id);
@@ -57,8 +57,8 @@ class CreateMetaIncentiveService {
       event_id,
       game_id,
       enable_option: false,
-      type: IIncentiveType.META,
-      meta,
+      type: IIncentiveType.GOAL,
+      goal,
     });
 
     const defaultOptions = await this.incentiveOptionsRepository.create({
@@ -73,4 +73,4 @@ class CreateMetaIncentiveService {
   }
 }
 
-export default CreateMetaIncentiveService;
+export default CreateGoalIncentiveService;

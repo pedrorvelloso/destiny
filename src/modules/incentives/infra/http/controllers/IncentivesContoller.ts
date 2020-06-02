@@ -12,7 +12,7 @@ import { container } from '@shared/container';
 
 import CreateOptionIncentiveService from '@modules/incentives/services/CreateOptionIncentiveService';
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
-import CreateMetaIncentiveService from '@modules/incentives/services/CreateMetaIncentiveService';
+import CreateGoalIncentiveService from '@modules/incentives/services/CreateGoalIncentiveService';
 
 @controller('/incentives')
 class IncentivesController implements interfaces.Controller {
@@ -48,23 +48,23 @@ class IncentivesController implements interfaces.Controller {
     return res.json(classToClass(incentive));
   }
 
-  @httpPost('/meta', ensureAuthenticated)
-  public async createMetaIncentive(
+  @httpPost('/goal', ensureAuthenticated)
+  public async createGoalIncentive(
     @request() req: Request,
     @response() res: Response,
   ): Promise<Response> {
     const user_id = req.user.id;
-    const { name, description, event_id, game_id, meta } = req.body;
+    const { name, description, event_id, game_id, goal } = req.body;
 
-    const createMetaIncentive = container.resolve(CreateMetaIncentiveService);
+    const createGoalIncentive = container.resolve(CreateGoalIncentiveService);
 
-    const incentive = await createMetaIncentive.execute({
+    const incentive = await createGoalIncentive.execute({
       name,
       description,
       event_id,
       game_id,
       user_id,
-      meta,
+      goal,
     });
 
     return res.json(classToClass(incentive));

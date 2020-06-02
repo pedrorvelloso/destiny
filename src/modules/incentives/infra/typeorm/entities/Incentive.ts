@@ -15,7 +15,7 @@ import Event from '@modules/events/infra/typeorm/entities/Event';
 import IncentiveOption from './IncentiveOption';
 
 export enum IIncentiveType {
-  META = 'meta',
+  GOAL = 'goal',
   OPTION = 'option',
 }
 

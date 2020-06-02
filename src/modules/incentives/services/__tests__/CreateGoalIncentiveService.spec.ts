@@ -11,7 +11,7 @@ import Game from '@modules/games/infra/typeorm/entities/Game';
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import ApplicationError from '@shared/errors/ApplicationError';
 import FakeIncentiveOptionsRepository from '@modules/incentives/repositories/fakes/FakeIncentiveOptionsRepository';
-import CreateMetaIncentiveService from '../CreateMetaIncentiveService';
+import CreateGoalIncentiveService from '../CreateGoalIncentiveService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeEventsRepository: FakeEventsRepository;
@@ -22,12 +22,12 @@ let fakeHashProvider: FakeHashProvider;
 let createUser: CreateUserService;
 let createEvent: CreateEventService;
 let createGame: CreateGameService;
-let createMetaIncentive: CreateMetaIncentiveService;
+let createGoalIncentive: CreateGoalIncentiveService;
 let user: User;
 let event: Event;
 let game: Game;
 
-describe('CreateMetaIncentive', () => {
+describe('CreateGoalIncentive', () => {
   beforeEach(async () => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeEventsRepository = new FakeEventsRepository();
@@ -38,7 +38,7 @@ describe('CreateMetaIncentive', () => {
     createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
     createEvent = new CreateEventService(fakeEventsRepository);
     createGame = new CreateGameService(fakeGamesRepository);
-    createMetaIncentive = new CreateMetaIncentiveService(
+    createGoalIncentive = new CreateGoalIncentiveService(
       fakeIncentivesRepository,
       fakeUsersRepository,
       fakeEventsRepository,
@@ -68,19 +68,19 @@ describe('CreateMetaIncentive', () => {
   });
 
   it('should be able to create option incentive', async () => {
-    const incentive = await createMetaIncentive.execute({
+    const incentive = await createGoalIncentive.execute({
       name: 'Cool incentive',
       description: 'Super cool incentive',
       event_id: event.id,
       game_id: game.id,
       user_id: user.id,
-      meta: 1000,
+      goal: 1000,
     });
 
     expect(incentive).toHaveProperty('name');
     expect(incentive).toHaveProperty('description');
     expect(incentive).toHaveProperty('enable_option');
-    expect(incentive.type).toBe('meta');
+    expect(incentive.type).toBe('goal');
     expect(incentive.created_by).toBe(user.id);
     expect(incentive.game_id).toBe(game.id);
     expect(incentive.event_id).toBe(event.id);
@@ -90,54 +90,54 @@ describe('CreateMetaIncentive', () => {
 
   it('should not be able to create option incentive if user/event/game doesnt exists', async () => {
     await expect(
-      createMetaIncentive.execute({
+      createGoalIncentive.execute({
         name: 'Cool incentive',
         description: 'Super cool incentive',
         event_id: -1,
         game_id: game.id,
         user_id: user.id,
-        meta: 1000,
+        goal: 1000,
       }),
     ).rejects.toBeInstanceOf(ApplicationError);
     await expect(
-      createMetaIncentive.execute({
+      createGoalIncentive.execute({
         name: 'Cool incentive',
         description: 'Super cool incentive',
         event_id: event.id,
         game_id: -1,
         user_id: user.id,
-        meta: 1000,
+        goal: 1000,
       }),
     ).rejects.toBeInstanceOf(ApplicationError);
     await expect(
-      createMetaIncentive.execute({
+      createGoalIncentive.execute({
         name: 'Cool incentive',
         description: 'Super cool incentive',
         event_id: event.id,
         game_id: game.id,
         user_id: 'bad',
-        meta: 1000,
+        goal: 1000,
       }),
     ).rejects.toBeInstanceOf(ApplicationError);
   });
   it('should not be able to create option incentive with same name as another incentive', async () => {
-    await createMetaIncentive.execute({
+    await createGoalIncentive.execute({
       name: 'Cool incentive',
       description: 'Super cool incentive',
       event_id: event.id,
       game_id: game.id,
       user_id: user.id,
-      meta: 1000,
+      goal: 1000,
     });
 
     await expect(
-      createMetaIncentive.execute({
+      createGoalIncentive.execute({
         name: 'Cool incentive',
         description: 'Super cool incentive',
         event_id: event.id,
         game_id: game.id,
         user_id: user.id,
-        meta: 1000,
+        goal: 1000,
       }),
     ).rejects.toBeInstanceOf(ApplicationError);
   });
