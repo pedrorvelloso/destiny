@@ -58,7 +58,7 @@ class Incentive {
   enable_option: boolean;
 
   @Column({ nullable: true })
-  meta?: number;
+  goal?: number;
 
   @Column('timestamp with time zone', { nullable: true })
   ended_at: Date;
