@@ -24,6 +24,24 @@ class FakeIncentivesRepository implements IIncentivesRepository {
     return incentive;
   }
 
+  public async findByEventId(event_id: number): Promise<Incentive[]> {
+    let incentives = this.incentives.filter(
+      incentive => incentive.event_id === event_id,
+    );
+
+    if (this.fakeIncentiveOptionsRepository && incentives) {
+      incentives = incentives.map(incentive => {
+        const options = this.fakeIncentiveOptionsRepository?.incentive_options.filter(
+          option => option.incentive_id === incentive.id,
+        );
+
+        return options ? { ...incentive, options } : incentive;
+      });
+    }
+
+    return incentives;
+  }
+
   public async findByName(name: string): Promise<Incentive | undefined> {
     return this.incentives.find(incentive => incentive.name === name);
   }

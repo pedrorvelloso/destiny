@@ -32,6 +32,7 @@ class IncentiveOption {
   incentive: Incentive;
 
   @Column()
+  @Exclude()
   created_by?: string;
 
   @ManyToOne(() => User)
@@ -45,9 +46,11 @@ class IncentiveOption {
   total: number;
 
   @CreateDateColumn()
+  @Exclude()
   created_at: Date;
 
   @UpdateDateColumn()
+  @Exclude()
   updated_at: Date;
 
   @AfterLoad()

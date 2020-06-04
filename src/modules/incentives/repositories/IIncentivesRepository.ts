@@ -6,6 +6,7 @@ export default interface IIncentivesRepository {
   create(data: ICreateIncentiveDTO): Promise<Incentive>;
   findById(id: number): Promise<Incentive | undefined>;
   findByName(name: string): Promise<Incentive | undefined>;
+  findByEventId(event_id: number): Promise<Incentive[]>;
   search(data: ISearchDTO): Promise<Incentive[]>;
   save(incentive: Incentive): Promise<Incentive>;
 }

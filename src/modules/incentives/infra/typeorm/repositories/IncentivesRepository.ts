@@ -22,6 +22,13 @@ class IncentivesRepository implements IIncentivesRepository {
     });
   }
 
+  public async findByEventId(event_id: number): Promise<Incentive[]> {
+    return this.ormRepository.find({
+      where: { event_id },
+      relations: ['options'],
+    });
+  }
+
   public async findByName(name: string): Promise<Incentive | undefined> {
     return this.ormRepository.findOne({ where: { name } });
   }
