@@ -16,7 +16,10 @@ class IncentivesRepository implements IIncentivesRepository {
   }
 
   public async findById(id: number): Promise<Incentive | undefined> {
-    return this.ormRepository.findOne(id);
+    return this.ormRepository.findOne({
+      where: { id },
+      relations: ['options'],
+    });
   }
 
   public async findByName(name: string): Promise<Incentive | undefined> {
@@ -39,6 +42,13 @@ class IncentivesRepository implements IIncentivesRepository {
 
   public async save(incentive: Incentive): Promise<Incentive> {
     return this.ormRepository.save(incentive);
+  }
+
+  public async displayById(id: number): Promise<Incentive | undefined> {
+    return this.ormRepository.findOne({
+      where: { id },
+      relations: ['options'],
+    });
   }
 }
 

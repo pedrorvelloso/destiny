@@ -3,7 +3,7 @@ import ICreateIncentiveOptionDTO from '@modules/incentives/dtos/ICreateIncentive
 import IIncentiveOptionsRepository from '../IIncentiveOptionsRepository';
 
 class FakeIncentiveOptionsRepository implements IIncentiveOptionsRepository {
-  private incentive_options: IncentiveOption[] = [];
+  public incentive_options: IncentiveOption[] = [];
 
   public async findById(id: number): Promise<IncentiveOption | undefined> {
     return this.incentive_options.find(
@@ -46,6 +46,14 @@ class FakeIncentiveOptionsRepository implements IIncentiveOptionsRepository {
     });
 
     return bulkIncentives;
+  }
+
+  public async save(option: IncentiveOption): Promise<IncentiveOption> {
+    const findIndex = this.incentive_options.findIndex(o => o.id === option.id);
+
+    this.incentive_options[findIndex] = option;
+
+    return option;
   }
 }
 

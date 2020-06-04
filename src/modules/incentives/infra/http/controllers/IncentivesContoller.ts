@@ -5,6 +5,7 @@ import {
   request,
   response,
   requestParam,
+  httpGet,
 } from 'inversify-express-utils';
 import { Request, Response } from 'express';
 import { classToClass } from 'class-transformer';
@@ -16,6 +17,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 import CreateOptionIncentiveService from '@modules/incentives/services/CreateOptionIncentiveService';
 import CreateGoalIncentiveService from '@modules/incentives/services/CreateGoalIncentiveService';
 import CreateOptionService from '@modules/incentives/services/CreateOptionService';
+import ShowIncentiveService from '@modules/incentives/services/ShowIncentiveService';
 
 @controller('/incentives')
 class IncentivesController implements interfaces.Controller {
@@ -73,6 +75,18 @@ class IncentivesController implements interfaces.Controller {
     return res.json(classToClass(incentive));
   }
 
+  @httpGet('/:id')
+  public async getIncentive(
+    @response() res: Response,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
+    const showIncentive = container.resolve(ShowIncentiveService);
+
+    const incentive = await showIncentive.execute({ incentive_id: id });
+
+    return res.json(classToClass(incentive));
+  }
+
   @httpPost('/:id/options', ensureAuthenticated)
   public async createOption(
     @response() res: Response,
@@ -89,7 +103,7 @@ class IncentivesController implements interfaces.Controller {
       incentive_id: id,
     });
 
-    return res.json(option);
+    return res.json(classToClass(option));
   }
 }
 

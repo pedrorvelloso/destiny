@@ -2,12 +2,26 @@ import ISearchDTO from '@shared/dtos/ISearchDTO';
 import Incentive from '@modules/incentives/infra/typeorm/entities/Incentive';
 import ICreateIncentiveDTO from '@modules/incentives/dtos/ICreateIncentiveDTO';
 import IIncentivesRepository from '../IIncentivesRepository';
+import FakeIncentiveOptionsRepository from './FakeIncentiveOptionsRepository';
 
 class FakeIncentivesRepository implements IIncentivesRepository {
   private incentives: Incentive[] = [];
 
+  constructor(
+    private fakeIncentiveOptionsRepository?: FakeIncentiveOptionsRepository,
+  ) {}
+
   public async findById(id: number): Promise<Incentive | undefined> {
-    return this.incentives.find(incentive => incentive.id === id);
+    const incentive = this.incentives.find(i => i.id === id);
+
+    if (this.fakeIncentiveOptionsRepository && incentive) {
+      const options = this.fakeIncentiveOptionsRepository?.incentive_options.filter(
+        option => option.incentive_id === id,
+      );
+      incentive.options = options || [];
+    }
+
+    return incentive;
   }
 
   public async findByName(name: string): Promise<Incentive | undefined> {
