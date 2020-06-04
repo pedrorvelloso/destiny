@@ -3,6 +3,7 @@ import IIncentiveOptionsRepository from '@modules/incentives/repositories/IIncen
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IIncentivesRepository from '@modules/incentives/repositories/IIncentivesRepository';
 import ApplicationError from '@shared/errors/ApplicationError';
+import Incentive from '@modules/incentives/infra/typeorm/entities/Incentive';
 import Donation from '../infra/typeorm/entities/Donation';
 import IDonationsRepository from '../repositories/IDonationsRepository';
 
@@ -41,11 +42,11 @@ class AllocateDonationToIncentiveService {
     );
     if (!incentive_option) throw new ApplicationError('Option does not exists');
 
-    const incentive = await this.incentivesRepository.findById(
+    const incentive = (await this.incentivesRepository.findById(
       incentive_option.incentive_id,
-    );
+    )) as Incentive;
 
-    if (incentive?.ended_at)
+    if (incentive.ended_at)
       throw new ApplicationError('Incentive is already over');
 
     donation.donation_incentive = incentive_option_id;

@@ -19,6 +19,7 @@ import ReviewDonationService from '@modules/donations/services/ReviewDonationSer
 import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
 
+import AllocateDonationToIncentiveService from '@modules/donations/services/AllocateDonationToIncentiveService';
 import { parameterIdValidation } from '../validations';
 
 @controller('/donations')
@@ -74,6 +75,28 @@ class DonationsController implements interfaces.Controller {
       `${EVENTS.NEW_REVIEWED_DONATION}:${donation.event_id}`,
       donation,
     );
+
+    return res.json(donation);
+  }
+
+  @httpPatch('/:id/allocate', ensureAuthenticated, parameterIdValidation)
+  public async allocateDonation(
+    @response() res: Response,
+    @request() req: Request,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
+    const user_id = req.user.id;
+    const { incentive_option_id } = req.body;
+
+    const allocateDonationToIncentive = container.resolve(
+      AllocateDonationToIncentiveService,
+    );
+
+    const donation = await allocateDonationToIncentive.execute({
+      donation_id: id,
+      incentive_option_id,
+      user_id,
+    });
 
     return res.json(donation);
   }
