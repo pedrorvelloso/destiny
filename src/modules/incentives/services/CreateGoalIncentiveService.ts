@@ -73,7 +73,7 @@ class CreateGoalIncentiveService {
 
     incentive.options = [defaultOptions];
 
-    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:*`);
+    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:${event_id}`);
 
     return incentive;
   }

@@ -107,7 +107,7 @@ describe('CreateGoalIncentive', () => {
     });
 
     expect(invalidate).toBeCalledTimes(1);
-    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:*`);
+    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:${event.id}`);
   });
 
   it('should not be able to create option incentive if user/event/game doesnt exists', async () => {

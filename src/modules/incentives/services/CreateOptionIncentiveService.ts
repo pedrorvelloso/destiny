@@ -83,7 +83,7 @@ class CreateOptionIncentiveService {
       incentive.options = options;
     }
 
-    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:*`);
+    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:${event_id}`);
 
     return incentive;
   }

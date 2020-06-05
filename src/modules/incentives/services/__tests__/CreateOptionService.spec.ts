@@ -70,7 +70,7 @@ describe('CreateOption', () => {
     });
 
     expect(invalidate).toBeCalledTimes(1);
-    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:*`);
+    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:1`);
   });
 
   it('should not be able to create new option if its a goal incentive', async () => {

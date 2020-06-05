@@ -32,18 +32,16 @@ class CreateOptionService {
     incentive_id,
     created_by,
   }: IRequest): Promise<IncentiveOption> {
-    const checkIncentiveExists = await this.incentivesRepository.findById(
-      incentive_id,
-    );
+    const incentive = await this.incentivesRepository.findById(incentive_id);
     const checkUserExists = await this.usersRepository.findById(created_by);
 
-    if (!checkUserExists || !checkIncentiveExists)
+    if (!checkUserExists || !incentive)
       throw new ApplicationError('Failed to create Incentive');
 
-    if (checkIncentiveExists.type === IIncentiveType.GOAL)
+    if (incentive.type === IIncentiveType.GOAL)
       throw new ApplicationError('Cannot create option for Goal Incentive');
 
-    if (!checkIncentiveExists.enable_option)
+    if (!incentive.enable_option)
       throw new ApplicationError('Incentive has disabled options');
 
     const option = await this.incentiveOptionsRepository.create({
@@ -52,7 +50,9 @@ class CreateOptionService {
       created_by,
     });
 
-    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:*`);
+    await this.cacheProvider.invalidate(
+      `${INCENTIVES_LIST}:${incentive.event_id}`,
+    );
 
     return option;
   }
