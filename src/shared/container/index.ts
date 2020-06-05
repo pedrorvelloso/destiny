@@ -13,6 +13,8 @@ import EventsRepository from '@modules/events/infra/typeorm/repositories/EventsR
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
+import sharedProviders from './providers';
+
 const indexContainer = new ContainerModule(
   (bind: interfaces.Bind, _: interfaces.Unbind) => {
     bind<IDonationsRepository>('DonationsRepository')
@@ -33,6 +35,7 @@ container.load(
   usersContainer,
   gamesContainer,
   incentivesContainer,
+  ...sharedProviders,
 );
 
 export { container };
