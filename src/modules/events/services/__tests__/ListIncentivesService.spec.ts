@@ -6,12 +6,14 @@ import Incentive, {
 import IncentiveOption from '@modules/incentives/infra/typeorm/entities/IncentiveOption';
 import ApplicationError from '@shared/errors/ApplicationError';
 import FakeEventsRepository from '@modules/events/repositories/fakes/FakeEventsRespository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import ListIncentivesService from '../ListIncentivesService';
 
 let listIncentive: ListIncentivesService;
 let fakeIncentivesRepository: FakeIncentivesRepository;
 let fakeIncentiveOptionsRepository: FakeIncentiveOptionsRepository;
 let fakeEventsRepository: FakeEventsRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let initialIncentive: Incentive;
 let option1: IncentiveOption;
 let option2: IncentiveOption;
@@ -23,6 +25,7 @@ describe('ListIncentives', () => {
       fakeIncentiveOptionsRepository,
     );
     fakeEventsRepository = new FakeEventsRepository();
+    fakeCacheProvider = new FakeCacheProvider();
 
     const event = await fakeEventsRepository.create({
       name: 'Event',
@@ -95,6 +98,7 @@ describe('ListIncentives', () => {
     listIncentive = new ListIncentivesService(
       fakeIncentivesRepository,
       fakeEventsRepository,
+      fakeCacheProvider,
     );
   });
 
@@ -106,6 +110,22 @@ describe('ListIncentives', () => {
     expect(incentives.length).toBe(2);
     expect(incentives[0].options[0].total).toBe(option2.total);
     expect(incentives[1].options[0].total).toBe(3500);
+  });
+
+  it('should be able to list from cache and save in cache', async () => {
+    const get = jest.spyOn(fakeCacheProvider, 'get');
+    const save = jest.spyOn(fakeCacheProvider, 'get');
+    await listIncentive.execute({
+      event_id: 1,
+    });
+    expect(save).toBeCalledTimes(1);
+    expect(get).toBeCalledTimes(1);
+
+    await listIncentive.execute({
+      event_id: 1,
+    });
+
+    expect(get).toBeCalledTimes(2);
   });
 
   it('should not be able to list incentives if event does not exists', async () => {
