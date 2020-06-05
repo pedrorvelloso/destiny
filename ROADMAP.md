@@ -21,9 +21,9 @@
 ## Release 🔜
 - [x] Pagination
 - [x] Set up Games
-- [ ] Donations incentives
-- [ ] Relation Donation <-> Incentive
-- [ ] Set up test db factory
+- [x] Donations incentives
+- [x] Relation Donation <-> Incentive
+- [x] General important cache
 
 ## Future 🌎
 - [ ] Find way to deal with different currencies
@@ -31,7 +31,6 @@
 - [ ] Add donation method w/ StripeJS
 - [ ] Listen to stripe webhooks and store new donations
 - [ ] Create method to check if there's new donations if application crash/stop working for each listener
-- [ ] Setup cache (Redis) for total donations (???)
 
 ## Frontend 🔜
 *Soon (in another repo :P)*

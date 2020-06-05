@@ -4,6 +4,8 @@ import ApplicationError from '@shared/errors/ApplicationError';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import User from '@modules/users/infra/typeorm/entities/User';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { EVENT_TOTAL } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import IDonationsRepository from '../repositories/IDonationsRepository';
 import Donation from '../infra/typeorm/entities/Donation';
 
@@ -19,6 +21,8 @@ class ReviewDonationService {
     private donationsRepository: IDonationsRepository,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -40,6 +44,8 @@ class ReviewDonationService {
     await this.donationsRepository.save(donation);
 
     donation.reviewer = { name: user.name } as User;
+
+    await this.cacheProvider.invalidate(`${EVENT_TOTAL}:${donation.event_id}`);
 
     return donation;
   }

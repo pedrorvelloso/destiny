@@ -9,12 +9,15 @@ import FakeIncentivesRepository from '@modules/incentives/repositories/fakes/Fak
 import Incentive, {
   IIncentiveType,
 } from '@modules/incentives/infra/typeorm/entities/Incentive';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import { INCENTIVES_LIST } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import AllocateDonationToIncentiveService from '../AllocateDonationToIncentiveService';
 
 let fakeUsersRepository: FakeUsersRepository;
 let fakeDonationsRepository: FakeDonationsRepository;
 let fakeIncentiveOptionsRepository: FakeIncentiveOptionsRepository;
 let fakeIncentivesRepository: FakeIncentivesRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let allocateDonationToIncentive: AllocateDonationToIncentiveService;
 let donation: Donation;
 let user: User;
@@ -27,11 +30,13 @@ describe('AllocateDonationToIncentive', () => {
     fakeDonationsRepository = new FakeDonationsRepository();
     fakeIncentiveOptionsRepository = new FakeIncentiveOptionsRepository();
     fakeIncentivesRepository = new FakeIncentivesRepository();
+    fakeCacheProvider = new FakeCacheProvider();
     allocateDonationToIncentive = new AllocateDonationToIncentiveService(
       fakeIncentiveOptionsRepository,
       fakeDonationsRepository,
       fakeUsersRepository,
       fakeIncentivesRepository,
+      fakeCacheProvider,
     );
 
     donation = await fakeDonationsRepository.create({
@@ -70,6 +75,18 @@ describe('AllocateDonationToIncentive', () => {
     });
 
     expect(allocatedDonation.donation_incentive).toBe(incentiveOption.id);
+  });
+
+  it('should be able to invalidate incentive lists from event cache', async () => {
+    const invalidate = jest.spyOn(fakeCacheProvider, 'invalidate');
+
+    await allocateDonationToIncentive.execute({
+      user_id: user.id,
+      donation_id: donation.id,
+      incentive_option_id: incentiveOption.id,
+    });
+
+    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:1`);
   });
 
   it('should not be able to allocate donation if user/donation/option does not exist', async () => {

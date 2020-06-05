@@ -7,6 +7,7 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import User from '@modules/users/infra/typeorm/entities/User';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import ShowEventTotalDonationsService from '../ShowEventTotalDonationsService';
 import StartEventService from '../StartEventService';
 import CreateEventService from '../CreateEventService';
@@ -16,6 +17,7 @@ let createEvent: CreateEventService;
 let saveNewDonation: SaveNewDonationService;
 let reviewDonation: ReviewDonationService;
 let fakeDonationRepository: FakeDonationsRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let startEvent: StartEventService;
 let showEventTotalDonations: ShowEventTotalDonationsService;
 let fakeUsersRepository: FakeUsersRepository;
@@ -29,16 +31,19 @@ describe('ShowEventTotalDonations', () => {
     fakeDonationRepository = new FakeDonationsRepository();
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
+    fakeCacheProvider = new FakeCacheProvider();
     createEvent = new CreateEventService(fakeEventsRepository);
     startEvent = new StartEventService(fakeEventsRepository);
     saveNewDonation = new SaveNewDonationService(fakeDonationRepository);
     reviewDonation = new ReviewDonationService(
       fakeDonationRepository,
       fakeUsersRepository,
+      fakeCacheProvider,
     );
     showEventTotalDonations = new ShowEventTotalDonationsService(
       fakeEventsRepository,
       fakeDonationRepository,
+      fakeCacheProvider,
     );
 
     createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
@@ -96,6 +101,57 @@ describe('ShowEventTotalDonations', () => {
     });
 
     expect(total).toBe(20);
+  });
+
+  it('should be able to show total from cache and save in cache', async () => {
+    const get = jest.spyOn(fakeCacheProvider, 'get');
+    const save = jest.spyOn(fakeCacheProvider, 'get');
+    const event = await createEvent.execute({
+      name: 'Super Fast Event',
+      description: 'Super fast description',
+      starts_at: new Date(2020, 3, 15, 12),
+      ends_at: new Date(2020, 3, 20, 12),
+    });
+
+    await startEvent.execute({ event_id: event.id });
+
+    const donation1 = await saveNewDonation.execute({
+      from: 'Donator',
+      message: 'Nice Message!',
+      amount: 10,
+      source: 'Source',
+      event_id: event.id,
+    });
+
+    const donation2 = await saveNewDonation.execute({
+      from: 'Donator',
+      message: 'Nice Message!',
+      amount: 10,
+      source: 'Source',
+      event_id: event.id,
+    });
+
+    await reviewDonation.execute({
+      donation_id: donation1.id,
+      reviewer_id: user.id,
+    });
+    await reviewDonation.execute({
+      donation_id: donation2.id,
+      reviewer_id: user.id,
+    });
+
+    await showEventTotalDonations.execute({
+      event_id: event.id,
+    });
+
+    expect(save).toBeCalledTimes(1);
+    expect(get).toBeCalledTimes(1);
+
+    await showEventTotalDonations.execute({
+      event_id: event.id,
+    });
+
+    expect(get).toBeCalledTimes(2);
   });
 
   it('should not be able to show total donations if event doesnt exists', async () => {

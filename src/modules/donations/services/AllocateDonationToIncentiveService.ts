@@ -4,6 +4,8 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IIncentivesRepository from '@modules/incentives/repositories/IIncentivesRepository';
 import ApplicationError from '@shared/errors/ApplicationError';
 import Incentive from '@modules/incentives/infra/typeorm/entities/Incentive';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { INCENTIVES_LIST } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import Donation from '../infra/typeorm/entities/Donation';
 import IDonationsRepository from '../repositories/IDonationsRepository';
 
@@ -24,6 +26,8 @@ class AllocateDonationToIncentiveService {
     private usersRepository: IUsersRepository,
     @inject('IncentivesRepository')
     private incentivesRepository: IIncentivesRepository,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -52,6 +56,10 @@ class AllocateDonationToIncentiveService {
     donation.donation_incentive = incentive_option_id;
 
     const allocatedIncentive = await this.donationsRepository.save(donation);
+
+    await this.cacheProvider.invalidate(
+      `${INCENTIVES_LIST}:${incentive.event_id}`,
+    );
 
     return allocatedIncentive;
   }
