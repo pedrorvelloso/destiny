@@ -3,6 +3,8 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IEventsRepository from '@modules/events/repositories/IEventsRepository';
 import IGamesRepository from '@modules/games/repositories/IGamesRepository';
 import ApplicationError from '@shared/errors/ApplicationError';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { INCENTIVES_LIST } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import Incentive, { IIncentiveType } from '../infra/typeorm/entities/Incentive';
 import IIncentivesRepository from '../repositories/IIncentivesRepository';
 import ICreateIncentiveOptionDTO from '../dtos/ICreateIncentiveOptionDTO';
@@ -31,6 +33,8 @@ class CreateOptionIncentiveService {
     private gamesRepository: IGamesRepository,
     @inject('IncentiveOptionsRepository')
     private incentiveOptionsRepository: IIncentiveOptionsRepository,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -78,6 +82,8 @@ class CreateOptionIncentiveService {
 
       incentive.options = options;
     }
+
+    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:*`);
 
     return incentive;
   }

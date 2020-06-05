@@ -6,11 +6,14 @@ import Incentive, {
   IIncentiveType,
 } from '@modules/incentives/infra/typeorm/entities/Incentive';
 import ApplicationError from '@shared/errors/ApplicationError';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import { INCENTIVES_LIST } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import CreateOptionService from '../CreateOptionService';
 
 let fakeIncentiveOptionsRepository: FakeIncentiveOptionsRepository;
 let fakeIncentivesRepository: FakeIncentivesRepository;
 let fakeUsersRepository: FakeUsersRepository;
+let fakeCacheProvider: FakeCacheProvider;
 let createOption: CreateOptionService;
 let user: User;
 let incentive: Incentive;
@@ -20,10 +23,12 @@ describe('CreateOption', () => {
     fakeIncentiveOptionsRepository = new FakeIncentiveOptionsRepository();
     fakeIncentivesRepository = new FakeIncentivesRepository();
     fakeUsersRepository = new FakeUsersRepository();
+    fakeCacheProvider = new FakeCacheProvider();
     createOption = new CreateOptionService(
       fakeIncentiveOptionsRepository,
       fakeIncentivesRepository,
       fakeUsersRepository,
+      fakeCacheProvider,
     );
 
     user = await fakeUsersRepository.create({
@@ -52,6 +57,20 @@ describe('CreateOption', () => {
 
     expect(option).toHaveProperty('id');
     expect(option.name).toBe('New Option');
+  });
+
+  it('should invalidate incentives list cache', async () => {
+    const invalidate = jest.spyOn(fakeCacheProvider, 'invalidate');
+    expect(invalidate).toBeCalledTimes(0);
+
+    await createOption.execute({
+      name: 'New Option',
+      created_by: user.id,
+      incentive_id: incentive.id,
+    });
+
+    expect(invalidate).toBeCalledTimes(1);
+    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:*`);
   });
 
   it('should not be able to create new option if its a goal incentive', async () => {

@@ -11,6 +11,8 @@ import Game from '@modules/games/infra/typeorm/entities/Game';
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import ApplicationError from '@shared/errors/ApplicationError';
 import FakeIncentiveOptionsRepository from '@modules/incentives/repositories/fakes/FakeIncentiveOptionsRepository';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import { INCENTIVES_LIST } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import CreateGoalIncentiveService from '../CreateGoalIncentiveService';
 
 let fakeUsersRepository: FakeUsersRepository;
@@ -19,6 +21,7 @@ let fakeGamesRepository: FakeGamesRepository;
 let fakeIncentivesRepository: FakeIncentivesRepository;
 let fakeIncentiveOptions: FakeIncentiveOptionsRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let createUser: CreateUserService;
 let createEvent: CreateEventService;
 let createGame: CreateGameService;
@@ -35,6 +38,7 @@ describe('CreateGoalIncentive', () => {
     fakeHashProvider = new FakeHashProvider();
     fakeIncentiveOptions = new FakeIncentiveOptionsRepository();
     fakeIncentivesRepository = new FakeIncentivesRepository();
+    fakeCacheProvider = new FakeCacheProvider();
     createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
     createEvent = new CreateEventService(fakeEventsRepository);
     createGame = new CreateGameService(fakeGamesRepository);
@@ -44,6 +48,7 @@ describe('CreateGoalIncentive', () => {
       fakeEventsRepository,
       fakeGamesRepository,
       fakeIncentiveOptions,
+      fakeCacheProvider,
     );
     jest.spyOn(Date, 'now').mockImplementation(() => {
       const customDate = new Date(2020, 1, 1, 12);
@@ -86,6 +91,23 @@ describe('CreateGoalIncentive', () => {
     expect(incentive.event_id).toBe(event.id);
 
     expect(incentive.options.length).toBe(1);
+  });
+
+  it('should invalidate incentives list cache', async () => {
+    const invalidate = jest.spyOn(fakeCacheProvider, 'invalidate');
+    expect(invalidate).toBeCalledTimes(0);
+
+    await createGoalIncentive.execute({
+      name: 'Cool incentive',
+      description: 'Super cool incentive',
+      event_id: event.id,
+      game_id: game.id,
+      user_id: user.id,
+      goal: 1000,
+    });
+
+    expect(invalidate).toBeCalledTimes(1);
+    expect(invalidate).toBeCalledWith(`${INCENTIVES_LIST}:*`);
   });
 
   it('should not be able to create option incentive if user/event/game doesnt exists', async () => {

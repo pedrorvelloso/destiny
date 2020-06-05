@@ -1,6 +1,8 @@
 import { injectable, inject } from 'inversify';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ApplicationError from '@shared/errors/ApplicationError';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { INCENTIVES_LIST } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import IncentiveOption from '../infra/typeorm/entities/IncentiveOption';
 import IIncentiveOptionsRepository from '../repositories/IIncentiveOptionsRepository';
 import IIncentivesRepository from '../repositories/IIncentivesRepository';
@@ -21,6 +23,8 @@ class CreateOptionService {
     private incentivesRepository: IIncentivesRepository,
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -47,6 +51,8 @@ class CreateOptionService {
       incentive_id,
       created_by,
     });
+
+    await this.cacheProvider.invalidate(`${INCENTIVES_LIST}:*`);
 
     return option;
   }
