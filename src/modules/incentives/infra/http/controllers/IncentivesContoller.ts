@@ -22,6 +22,7 @@ import {
   parameterIdValidation,
   createOptionIncentiveValidation,
   createGoalIncentiveValidation,
+  createOptionValidation,
 } from '../validations';
 
 @controller('/incentives')
@@ -92,7 +93,12 @@ class IncentivesController implements interfaces.Controller {
     return res.json(classToClass(incentive));
   }
 
-  @httpPost('/:id/options', ensureAuthenticated, parameterIdValidation)
+  @httpPost(
+    '/:id/options',
+    ensureAuthenticated,
+    parameterIdValidation,
+    createOptionValidation,
+  )
   public async createOption(
     @response() res: Response,
     @request() req: Request,

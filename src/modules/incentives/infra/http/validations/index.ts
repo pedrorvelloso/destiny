@@ -26,3 +26,9 @@ export const createGoalIncentiveValidation = celebrate({
     goal: Joi.number().required(),
   }),
 });
+
+export const createOptionValidation = celebrate({
+  [Segments.BODY]: {
+    name: Joi.string().required(),
+  },
+});
