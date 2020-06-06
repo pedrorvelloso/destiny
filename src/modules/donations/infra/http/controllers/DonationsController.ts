@@ -20,7 +20,7 @@ import ListUnreviewedDonationsService from '@modules/donations/services/ListUnre
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
 
 import AllocateDonationToIncentiveService from '@modules/donations/services/AllocateDonationToIncentiveService';
-import { parameterIdValidation } from '../validations';
+import { parameterIdValidation, allocateValidatiom } from '../validations';
 
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
@@ -79,7 +79,12 @@ class DonationsController implements interfaces.Controller {
     return res.json(donation);
   }
 
-  @httpPatch('/:id/allocate', ensureAuthenticated, parameterIdValidation)
+  @httpPatch(
+    '/:id/allocate',
+    ensureAuthenticated,
+    parameterIdValidation,
+    allocateValidatiom,
+  )
   public async allocateDonation(
     @response() res: Response,
     @request() req: Request,

@@ -5,3 +5,9 @@ export const parameterIdValidation = celebrate({
     id: Joi.number().required(),
   },
 });
+
+export const allocateValidatiom = celebrate({
+  [Segments.BODY]: {
+    incentive_option_id: Joi.number().required(),
+  },
+});
