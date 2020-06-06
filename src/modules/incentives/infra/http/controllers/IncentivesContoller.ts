@@ -18,10 +18,15 @@ import CreateOptionIncentiveService from '@modules/incentives/services/CreateOpt
 import CreateGoalIncentiveService from '@modules/incentives/services/CreateGoalIncentiveService';
 import CreateOptionService from '@modules/incentives/services/CreateOptionService';
 import ShowIncentiveService from '@modules/incentives/services/ShowIncentiveService';
+import {
+  parameterIdValidation,
+  createOptionIncentiveValidation,
+  createGoalIncentiveValidation,
+} from '../validations';
 
 @controller('/incentives')
 class IncentivesController implements interfaces.Controller {
-  @httpPost('/option', ensureAuthenticated)
+  @httpPost('/option', ensureAuthenticated, createOptionIncentiveValidation)
   public async createOptionIncentive(
     @request() req: Request,
     @response() res: Response,
@@ -53,7 +58,7 @@ class IncentivesController implements interfaces.Controller {
     return res.json(classToClass(incentive));
   }
 
-  @httpPost('/goal', ensureAuthenticated)
+  @httpPost('/goal', ensureAuthenticated, createGoalIncentiveValidation)
   public async createGoalIncentive(
     @request() req: Request,
     @response() res: Response,
@@ -75,7 +80,7 @@ class IncentivesController implements interfaces.Controller {
     return res.json(classToClass(incentive));
   }
 
-  @httpGet('/:id')
+  @httpGet('/:id', parameterIdValidation)
   public async getIncentive(
     @response() res: Response,
     @requestParam('id') id: number,
@@ -87,7 +92,7 @@ class IncentivesController implements interfaces.Controller {
     return res.json(classToClass(incentive));
   }
 
-  @httpPost('/:id/options', ensureAuthenticated)
+  @httpPost('/:id/options', ensureAuthenticated, parameterIdValidation)
   public async createOption(
     @response() res: Response,
     @request() req: Request,
