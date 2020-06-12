@@ -18,6 +18,8 @@ import CreateOptionIncentiveService from '@modules/incentives/services/CreateOpt
 import CreateGoalIncentiveService from '@modules/incentives/services/CreateGoalIncentiveService';
 import CreateOptionService from '@modules/incentives/services/CreateOptionService';
 import ShowIncentiveService from '@modules/incentives/services/ShowIncentiveService';
+import ShowIncentiveByGameIdService from '@modules/incentives/services/ShowIncentivesByGameIdService';
+
 import {
   parameterIdValidation,
   createOptionIncentiveValidation,
@@ -115,6 +117,20 @@ class IncentivesController implements interfaces.Controller {
     });
 
     return res.json(classToClass(option));
+  }
+
+  @httpGet('/game/:id')
+  public async getIncentivesByGame(
+    @response() res: Response,
+    @requestParam('id') gameId: number,
+  ): Promise<Response> {
+    const showIncentiveByGameId = container.resolve(
+      ShowIncentiveByGameIdService,
+    );
+
+    const incentives = await showIncentiveByGameId.execute({ game_id: gameId });
+
+    return res.json(classToClass(incentives));
   }
 }
 

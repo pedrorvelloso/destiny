@@ -18,8 +18,9 @@ import ListAllDonationsService from '@modules/donations/services/ListAllDonation
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
 import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
-
 import AllocateDonationToIncentiveService from '@modules/donations/services/AllocateDonationToIncentiveService';
+import ShowDonationService from '@modules/donations/services/ShowDonationService';
+
 import { parameterIdValidation, allocateValidatiom } from '../validations';
 
 @controller('/donations')
@@ -31,6 +32,18 @@ class DonationsController implements interfaces.Controller {
     const donations = await listAllDonations.execute();
 
     return res.json(donations);
+  }
+
+  @httpGet('/:id')
+  public async getDonation(
+    @response() res: Response,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
+    const showDonation = container.resolve(ShowDonationService);
+
+    const donation = await showDonation.execute({ id });
+
+    return res.json(donation);
   }
 
   @httpGet('/unreviewed/event/:id', parameterIdValidation)

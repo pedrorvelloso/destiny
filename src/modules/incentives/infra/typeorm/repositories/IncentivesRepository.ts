@@ -4,6 +4,7 @@ import { getRepository, Repository, Like } from 'typeorm';
 import ISearchDTO from '@shared/dtos/ISearchDTO';
 import IIncentivesRepository from '@modules/incentives/repositories/IIncentivesRepository';
 import ICreateIncentiveDTO from '@modules/incentives/dtos/ICreateIncentiveDTO';
+import IFindByGameIdDTO from '@modules/incentives/dtos/IFindByGameIdDTO';
 
 import Incentive from '../entities/Incentive';
 
@@ -25,6 +26,16 @@ class IncentivesRepository implements IIncentivesRepository {
   public async findByEventId(event_id: number): Promise<Incentive[]> {
     return this.ormRepository.find({
       where: { event_id },
+      relations: ['options'],
+    });
+  }
+
+  public async findByGameId({
+    game_id,
+    event_id,
+  }: IFindByGameIdDTO): Promise<Incentive[]> {
+    return this.ormRepository.find({
+      where: { event_id, game_id },
       relations: ['options'],
     });
   }

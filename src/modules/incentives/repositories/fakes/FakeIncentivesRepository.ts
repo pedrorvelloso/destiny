@@ -1,6 +1,7 @@
 import ISearchDTO from '@shared/dtos/ISearchDTO';
 import Incentive from '@modules/incentives/infra/typeorm/entities/Incentive';
 import ICreateIncentiveDTO from '@modules/incentives/dtos/ICreateIncentiveDTO';
+import IFindByGameIdDTO from '@modules/incentives/dtos/IFindByGameIdDTO';
 import IIncentivesRepository from '../IIncentivesRepository';
 import FakeIncentiveOptionsRepository from './FakeIncentiveOptionsRepository';
 
@@ -27,6 +28,28 @@ class FakeIncentivesRepository implements IIncentivesRepository {
   public async findByEventId(event_id: number): Promise<Incentive[]> {
     let incentives = this.incentives.filter(
       incentive => incentive.event_id === event_id,
+    );
+
+    if (this.fakeIncentiveOptionsRepository && incentives) {
+      incentives = incentives.map(incentive => {
+        const options = this.fakeIncentiveOptionsRepository?.incentive_options.filter(
+          option => option.incentive_id === incentive.id,
+        );
+
+        return options ? { ...incentive, options } : incentive;
+      });
+    }
+
+    return incentives;
+  }
+
+  public async findByGameId({
+    event_id,
+    game_id,
+  }: IFindByGameIdDTO): Promise<Incentive[]> {
+    let incentives = this.incentives.filter(
+      incentive =>
+        incentive.event_id === event_id && incentive.game_id === game_id,
     );
 
     if (this.fakeIncentiveOptionsRepository && incentives) {
