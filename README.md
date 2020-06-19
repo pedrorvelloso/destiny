@@ -1,6 +1,6 @@
 # Destiny
 
-Destiny is a donation tracker for speedruns/gaming charity events. In the future I'll also include features to hold donations incentives and create events with schedule
+Destiny is a donation tracker for speedruns/gaming charity events.
 
 ## Development
 
