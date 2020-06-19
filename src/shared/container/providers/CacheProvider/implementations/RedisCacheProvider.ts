@@ -1,6 +1,9 @@
 import Redis, { Redis as RedisClient } from 'ioredis';
 import { injectable } from 'inversify';
 import { classToClass } from 'class-transformer';
+
+import cacheConfig from '@config/cache';
+
 import ICacheProvider from '../models/ICacheProvider';
 
 @injectable()
@@ -8,10 +11,7 @@ class RedisCacheProvider implements ICacheProvider {
   private client: RedisClient;
 
   constructor() {
-    this.client = new Redis({
-      host: 'localhost',
-      port: 6379,
-    });
+    this.client = new Redis(cacheConfig.redis);
   }
 
   public async save(
