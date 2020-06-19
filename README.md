@@ -13,6 +13,9 @@ yarn
 # start docker db
 docker-compose up db
 
+# start redis
+docker-compose up redis
+
 # set env file
 cp .env.example .env
 ```
