@@ -92,7 +92,9 @@ class DonationsRepository implements IDonationsRepository {
       })
       .getRawOne();
 
-    return parseInt(total, 10);
+    console.log(total);
+
+    return total;
   }
 
   public async findByEventId({

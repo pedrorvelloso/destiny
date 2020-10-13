@@ -24,7 +24,7 @@ export default class CreateDonations1589808717466
           },
           {
             name: 'amount',
-            type: 'int',
+            type: 'float',
           },
           {
             name: 'source',

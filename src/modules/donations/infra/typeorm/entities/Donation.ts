@@ -22,7 +22,7 @@ class Donation {
   @Column()
   message: string;
 
-  @Column()
+  @Column('float', { precision: 5, scale: 2 })
   amount: number;
 
   @Column()
