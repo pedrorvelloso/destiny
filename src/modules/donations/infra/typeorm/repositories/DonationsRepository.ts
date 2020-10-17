@@ -92,8 +92,6 @@ class DonationsRepository implements IDonationsRepository {
       })
       .getRawOne();
 
-    console.log(total);
-
     return total;
   }
 

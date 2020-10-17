@@ -50,7 +50,8 @@ class StreamlabsListener implements IDonationListener {
           eventData.message.forEach(async ({ amount, from, message }) => {
             const donation = await saveNewDonation.execute({
               from,
-              amount,
+              // assures every amount value is float to fix inaccurate string
+              amount: parseFloat(String(amount)),
               message,
               source: 'Streamlabs',
               event_id: activeEvent.id,

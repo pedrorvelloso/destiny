@@ -12,6 +12,12 @@ class RedisCacheProvider implements ICacheProvider {
 
   constructor() {
     this.client = new Redis(cacheConfig.redis);
+
+    this.client.on('error', () =>
+      console.log(
+        '🚫 Something went wrong with Redis. Please, check connection',
+      ),
+    );
   }
 
   public async save(
