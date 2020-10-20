@@ -4,7 +4,6 @@ import { injectable, inject } from 'inversify';
 import { container } from '@shared/container';
 
 import { websocket } from '@shared/infra/http/server';
-import { EVENTS } from '@shared/infra/ws/events';
 
 import SaveNewDonationService from '@modules/donations/services/SaveNewDonationService';
 
@@ -53,14 +52,11 @@ class StreamlabsListener implements IDonationListener {
               // assures every amount value is float to fix inaccurate string
               amount: parseFloat(String(amount)),
               message,
-              source: 'Streamlabs',
+              source: StreamlabsListener.name,
               event_id: activeEvent.id,
             });
 
-            websocket.emit(
-              `${EVENTS.NEW_DONATION}:${donation.event_id}`,
-              donation,
-            );
+            websocket.emit.newDonation(donation);
           });
         }
       }

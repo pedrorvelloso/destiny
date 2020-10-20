@@ -4,7 +4,6 @@ import { injectable, inject } from 'inversify';
 import { container } from '@shared/container';
 
 import { websocket } from '@shared/infra/http/server';
-import { EVENTS } from '@shared/infra/ws/events';
 
 import SaveNewDonationService from '@modules/donations/services/SaveNewDonationService';
 
@@ -43,11 +42,11 @@ class FakeServerListener implements IDonationListener {
           from: eventData.from,
           amount: eventData.amount,
           message: eventData.message,
-          source: 'FakeServer',
+          source: FakeServerListener.name,
           event_id: activeEvent.id,
         });
 
-        websocket.emit(`${EVENTS.NEW_DONATION}:${donation.event_id}`, donation);
+        websocket.emit.newDonation(donation);
       }
     });
   }
