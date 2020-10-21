@@ -13,9 +13,11 @@ import { Response, Request } from 'express';
 import CreateGameService from '@modules/games/services/CreateGameService';
 import SearchGameService from '@modules/games/services/SearchGameService';
 
+import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+
 @controller('/games')
 class GamesController implements interfaces.Controller {
-  @httpPost('/')
+  @httpPost('/', ensureAuthenticated)
   public async createGame(
     @request() req: Request,
     @response() res: Response,
