@@ -10,4 +10,4 @@ const gamesContainer = new ContainerModule(
   },
 );
 
-export { gamesContainer };
+export default gamesContainer;
