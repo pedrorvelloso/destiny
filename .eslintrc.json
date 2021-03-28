@@ -7,7 +7,6 @@
   "extends": [
       "airbnb-base",
       "plugin:@typescript-eslint/recommended",
-      "prettier/@typescript-eslint",
       "plugin:prettier/recommended"
   ],
   "globals": {
@@ -33,7 +32,6 @@
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "_"
     }],
-    "@typescript-eslint/interface-name-prefix": ["error", { "prefixWithI": "always" }],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -41,7 +39,8 @@
         "ts": "never"
       }
     ],
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "camelcase": "off"
   },
   "settings": {
     "import/resolver": {

@@ -1,4 +1,4 @@
-import express, { Response } from 'express';
+import express from 'express';
 import http from 'http';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import cors from 'cors';

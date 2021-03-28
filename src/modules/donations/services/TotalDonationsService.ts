@@ -9,7 +9,7 @@ class TotalDonationService {
   ) {}
 
   public async execute(): Promise<number> {
-    const total = this.donationsRepository.total();
+    const total = await this.donationsRepository.total();
 
     return total;
   }

@@ -14,6 +14,7 @@ import Game from '@modules/games/infra/typeorm/entities/Game';
 import Event from '@modules/events/infra/typeorm/entities/Event';
 import IncentiveOption from './IncentiveOption';
 
+// eslint-disable-next-line no-shadow
 export enum IIncentiveType {
   GOAL = 'goal',
   OPTION = 'option',
