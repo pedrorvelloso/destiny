@@ -1,17 +1,9 @@
 import { apiTest } from '../utils/api';
-import { clearDatabase, closeConn, createConn } from '../utils/database';
+import { clearDatabase } from '../utils/database';
 
 describe('auth integration', () => {
-  beforeAll(() => {
-    return createConn();
-  });
-
-  beforeEach(() => {
+  afterEach(() => {
     return clearDatabase();
-  });
-
-  afterAll(() => {
-    return closeConn();
   });
 
   it('should create new user', async () => {

@@ -1,4 +1,7 @@
-import { WithPrecisionColumnType } from 'typeorm/driver/types/ColumnTypes';
+import { ColumnType } from 'typeorm';
 
-export const timestamp: WithPrecisionColumnType =
+/**
+ * timestamp doesnt work with SQLITE
+ */
+export const timestamp: ColumnType =
   process.env.NODE_ENV === 'test' ? 'time' : 'timestamp with time zone';
