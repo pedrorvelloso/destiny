@@ -14,7 +14,7 @@ import { DestinySocket } from '../ws';
 
 const expressServer = express();
 
-const httpServer = http.createServer(expressServer);
+export const httpServer = http.createServer(expressServer);
 export const websocket = new DestinySocket(httpServer).get();
 
 const inversifyServer = new InversifyExpressServer(
@@ -58,9 +58,3 @@ inversifyServer.setErrorConfig(application => {
 });
 
 inversifyServer.build();
-
-const applicationPort = process.env.PORT || 3333;
-
-httpServer.listen(applicationPort, () => {
-  console.log(`🚀 Listening on port ${applicationPort}`);
-});

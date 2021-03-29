@@ -9,6 +9,9 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { timestamp } from '@shared/infra/typeorm/utils/timeColumn';
+import { enumColumn } from '@shared/infra/typeorm/utils/enumColumn';
+
 import User from '@modules/users/infra/typeorm/entities/User';
 import Game from '@modules/games/infra/typeorm/entities/Game';
 import Event from '@modules/events/infra/typeorm/entities/Event';
@@ -52,7 +55,7 @@ class Incentive {
   @JoinColumn({ name: 'event_id' })
   event: Event;
 
-  @Column({ type: 'enum', enum: IIncentiveType })
+  @Column({ type: enumColumn, enum: IIncentiveType })
   type: IIncentiveType;
 
   @Column()
@@ -61,7 +64,7 @@ class Incentive {
   @Column({ nullable: true })
   goal?: number;
 
-  @Column('timestamp with time zone', { nullable: true })
+  @Column(timestamp, { nullable: true })
   ended_at: Date;
 
   @OneToMany(_type => IncentiveOption, option => option.incentive)

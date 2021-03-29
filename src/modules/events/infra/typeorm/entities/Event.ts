@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { timestamp } from '@shared/infra/typeorm/utils/timeColumn';
 
 @Entity('events')
 class Event {
@@ -20,13 +21,13 @@ class Event {
   @Column({ default: false })
   active: boolean;
 
-  @Column('timestamp with time zone')
+  @Column(timestamp)
   starts_at: Date;
 
-  @Column('timestamp with time zone')
+  @Column(timestamp)
   ends_at: Date;
 
-  @Column('timestamp with time zone', { nullable: true })
+  @Column(timestamp, { nullable: true })
   ended_at: Date;
 
   @CreateDateColumn()
