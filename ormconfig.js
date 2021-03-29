@@ -33,13 +33,7 @@ const db = {
     ],
     "subscribers": [
       rootDir + "/modules/**/infra/typeorm/subscribers/*.{js,ts}"
-    ],
-    "migrations": [
-      rootDir + "/shared/infra/typeorm/migrations/*.{js,ts}"
-    ],
-    "cli": {
-      "migrationsDir": rootDir + "/shared/infra/typeorm/migrations"
-    }
+    ]
   }
 }
 
