@@ -1,4 +1,4 @@
-import express, { Response } from 'express';
+import express from 'express';
 import http from 'http';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import cors from 'cors';
@@ -10,12 +10,12 @@ import { container } from '@shared/container';
 import './routes';
 
 import ApplicationError from '@shared/errors/ApplicationError';
-import { createWebsocket } from '../ws';
+import { DestinySocket } from '../ws';
 
 const expressServer = express();
 
-const httpServer = http.createServer(expressServer);
-export const websocket = createWebsocket(httpServer);
+export const httpServer = http.createServer(expressServer);
+export const websocket = new DestinySocket(httpServer).get();
 
 const inversifyServer = new InversifyExpressServer(
   container,
@@ -41,7 +41,7 @@ inversifyServer.setErrorConfig(application => {
       request: express.Request,
       response: express.Response,
       _: express.NextFunction,
-    ): Response => {
+    ): express.Response => {
       if (error instanceof ApplicationError) {
         return response.status(error.statusCode).json({
           status: 'error',
@@ -58,9 +58,3 @@ inversifyServer.setErrorConfig(application => {
 });
 
 inversifyServer.build();
-
-const applicationPort = process.env.PORT || 3333;
-
-httpServer.listen(applicationPort, () => {
-  console.log(`🚀 Listening on port ${applicationPort}`);
-});

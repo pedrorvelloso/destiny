@@ -13,6 +13,12 @@ services:
       POSTGRES_PASSWORD: ${PG_PASSWORD}
       POSTGRES_DB: ${PG_DATABASE}
 
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
   app:
     build: .
     restart: always
@@ -29,3 +35,5 @@ services:
       - PG_USER=${PG_USER}
       - PG_PASSWORD=${PG_PASSWORD}
       - PG_DATABASE=${PG_DATABASE}
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}

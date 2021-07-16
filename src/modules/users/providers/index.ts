@@ -1,10 +1,20 @@
-import { Container } from 'inversify';
+import { ContainerModule, interfaces } from 'inversify';
 
 import IHashProvider from './HashProvider/models/IHashProvider';
 import BcryptHashProvider from './HashProvider/implementations/BcryptHashProvider';
 
-const usersContainer = new Container({ defaultScope: 'Singleton' });
+import IUsersRepository from '../repositories/IUsersRepository';
+import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 
-usersContainer.bind<IHashProvider>('HashProvider').to(BcryptHashProvider);
+const usersContainer = new ContainerModule(
+  (bind: interfaces.Bind, _: interfaces.Unbind) => {
+    bind<IUsersRepository>('UsersRepository')
+      .to(UsersRepository)
+      .inSingletonScope();
+    bind<IHashProvider>('HashProvider')
+      .to(BcryptHashProvider)
+      .inSingletonScope();
+  },
+);
 
-export { usersContainer };
+export default usersContainer;

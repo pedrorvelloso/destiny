@@ -3,6 +3,7 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from '@modules/users/services/CreateUserService';
 import User from '@modules/users/infra/typeorm/entities/User';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import SaveNewDonationService from '../SaveNewDonationService';
 import TotalDonationService from '../TotalDonationsService';
 import ReviewDonationService from '../ReviewDonationService';
@@ -13,6 +14,7 @@ let saveNewDonation: SaveNewDonationService;
 let reviewDonation: ReviewDonationService;
 let fakeUsersRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let createUser: CreateUserService;
 let user: User;
 
@@ -21,10 +23,12 @@ describe('TotalDonations', () => {
     fakeDonationsRepository = new FakeDonationsRepository();
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
+    fakeCacheProvider = new FakeCacheProvider();
     saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
     reviewDonation = new ReviewDonationService(
       fakeDonationsRepository,
       fakeUsersRepository,
+      fakeCacheProvider,
     );
     totalDonations = new TotalDonationService(fakeDonationsRepository);
 

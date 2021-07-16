@@ -5,6 +5,7 @@ import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHa
 import CreateUserService from '@modules/users/services/CreateUserService';
 import User from '@modules/users/infra/typeorm/entities/User';
 import CreateEventService from '@modules/events/services/CreateEventService';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeDonationsRepository from '../../repositories/fakes/FakeDonationsRepository';
 import SaveNewDonationService from '../SaveNewDonationService';
 import ListUnreviewedDonationsService from '../ListUnreviewedDonationsService';
@@ -14,6 +15,7 @@ let fakeDonationsRepository: FakeDonationsRepository;
 let fakeEventsRepository: FakeEventsRepository;
 let fakeUsersRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let createEvent: CreateEventService;
 let listUnreviewedDonations: ListUnreviewedDonationsService;
 let reviewDonation: ReviewDonationService;
@@ -27,11 +29,13 @@ describe('ListAllUnrevisedDonations', () => {
     fakeEventsRepository = new FakeEventsRepository();
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
+    fakeCacheProvider = new FakeCacheProvider();
     createEvent = new CreateEventService(fakeEventsRepository);
     saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
     reviewDonation = new ReviewDonationService(
       fakeDonationsRepository,
       fakeUsersRepository,
+      fakeCacheProvider,
     );
     listUnreviewedDonations = new ListUnreviewedDonationsService(
       fakeDonationsRepository,

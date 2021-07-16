@@ -10,7 +10,6 @@ import {
 } from 'inversify-express-utils';
 
 import { container } from '@shared/container';
-import { EVENTS } from '@shared/infra/ws/events';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 
@@ -18,8 +17,10 @@ import ListAllDonationsService from '@modules/donations/services/ListAllDonation
 import ReviewDonationService from '@modules/donations/services/ReviewDonationService';
 import ListUnreviewedDonationsService from '@modules/donations/services/ListUnreviewedDonationsService';
 import TotalDonationService from '@modules/donations/services/TotalDonationsService';
+import AllocateDonationToIncentiveService from '@modules/donations/services/AllocateDonationToIncentiveService';
+import ShowDonationService from '@modules/donations/services/ShowDonationService';
 
-import { parameterIdValidation } from '../validations';
+import { parameterIdValidation, allocateValidatiom } from '../validations';
 
 @controller('/donations')
 class DonationsController implements interfaces.Controller {
@@ -30,6 +31,18 @@ class DonationsController implements interfaces.Controller {
     const donations = await listAllDonations.execute();
 
     return res.json(donations);
+  }
+
+  @httpGet('/:id')
+  public async getDonation(
+    @response() res: Response,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
+    const showDonation = container.resolve(ShowDonationService);
+
+    const donation = await showDonation.execute({ id });
+
+    return res.json(donation);
   }
 
   @httpGet('/unreviewed/event/:id', parameterIdValidation)
@@ -70,10 +83,34 @@ class DonationsController implements interfaces.Controller {
       reviewer_id: user_id,
     });
 
-    req.ws.emit(
-      `${EVENTS.NEW_REVIEWED_DONATION}:${donation.event_id}`,
-      donation,
+    req.ws.emit.reviewedDonation(donation);
+
+    return res.json(donation);
+  }
+
+  @httpPatch(
+    '/:id/allocate',
+    ensureAuthenticated,
+    parameterIdValidation,
+    allocateValidatiom,
+  )
+  public async allocateDonation(
+    @response() res: Response,
+    @request() req: Request,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
+    const user_id = req.user.id;
+    const { incentive_option_id } = req.body;
+
+    const allocateDonationToIncentive = container.resolve(
+      AllocateDonationToIncentiveService,
     );
+
+    const donation = await allocateDonationToIncentive.execute({
+      donation_id: id,
+      incentive_option_id,
+      user_id,
+    });
 
     return res.json(donation);
   }

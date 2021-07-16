@@ -4,12 +4,15 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepo
 import CreateUserService from '@modules/users/services/CreateUserService';
 import User from '@modules/users/infra/typeorm/entities/User';
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
+import { EVENT_TOTAL } from '@shared/container/providers/CacheProvider/utils/prefixes';
 import SaveNewDonationService from '../SaveNewDonationService';
 import ReviewDonationService from '../ReviewDonationService';
 
 let fakeDonationsRepository: FakeDonationsRepository;
 let fakeUsersRepository: FakeUsersRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeCacheProvider: FakeCacheProvider;
 let reviewDonation: ReviewDonationService;
 let saveNewDonation: SaveNewDonationService;
 let createUser: CreateUserService;
@@ -20,10 +23,12 @@ describe('ReviewDonation', () => {
     fakeDonationsRepository = new FakeDonationsRepository();
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
+    fakeCacheProvider = new FakeCacheProvider();
     saveNewDonation = new SaveNewDonationService(fakeDonationsRepository);
     reviewDonation = new ReviewDonationService(
       fakeDonationsRepository,
       fakeUsersRepository,
+      fakeCacheProvider,
     );
     createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
 
@@ -51,6 +56,24 @@ describe('ReviewDonation', () => {
 
     expect(donation.reviewed).toBe(true);
     expect(donation.reviewed_by).toBe(user.id);
+  });
+
+  it('should be able to invalidate total from event cache', async () => {
+    const invalidate = jest.spyOn(fakeCacheProvider, 'invalidate');
+    const donation = await saveNewDonation.execute({
+      from: 'Donator',
+      message: 'Donation Message',
+      amount: 15,
+      source: 'SomeListener',
+      event_id: 1,
+    });
+
+    await reviewDonation.execute({
+      donation_id: donation.id,
+      reviewer_id: user.id,
+    });
+
+    expect(invalidate).toBeCalledWith(`${EVENT_TOTAL}:${donation.event_id}`);
   });
 
   it('should not be able to review donation if reviewer does not exists', async () => {

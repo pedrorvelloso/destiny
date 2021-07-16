@@ -6,7 +6,6 @@ import {
 
 import { container } from '@shared/container';
 import { websocket } from '@shared/infra/http/server';
-import { EVENTS } from '@shared/infra/ws/events';
 
 import ShowEventTotalDonationsService from '@modules/events/services/ShowEventTotalDonationsService';
 
@@ -30,10 +29,10 @@ class DonationSubscriber implements EntitySubscriberInterface<Donation> {
         event_id: donation.event_id,
       });
 
-      websocket.emit(
-        `${EVENTS.TOTAL_DONATIONS}:${donation.event_id}`,
-        total + donation.amount,
-      );
+      websocket.emit.totalDonations({
+        event_id: donation.event_id,
+        total: total + donation.amount,
+      });
     }
   }
 }

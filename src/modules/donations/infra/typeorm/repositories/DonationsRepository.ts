@@ -4,6 +4,7 @@ import IDonationsRepository from '@modules/donations/repositories/IDonationsRepo
 
 import ICreateDonationDTO from '@modules/donations/dtos/ICreateDonationDTO';
 import IFindByReviewedStatusDTO from '@modules/donations/dtos/IFindByReviewedStatusDTO';
+import IFindByEventIdDTO from '@modules/donations/dtos/IFindByEventIdDTO';
 
 import Donation from '../entities/Donation';
 
@@ -91,7 +92,31 @@ class DonationsRepository implements IDonationsRepository {
       })
       .getRawOne();
 
-    return parseInt(total, 10);
+    return total;
+  }
+
+  public async findByEventId({
+    event_id,
+    pagination,
+  }: IFindByEventIdDTO): Promise<Donation[]> {
+    const queryBuilder = this.ormRepository
+      .createQueryBuilder('donations')
+      .select(['donations', 'user.name'])
+      .leftJoin('donations.reviewer', 'user')
+      .orderBy('donations.created_at', 'DESC')
+      .where('donations.event_id = :event_id', { event_id });
+
+    if (pagination) {
+      queryBuilder.limit(pagination.limit);
+      if (pagination.cursor)
+        queryBuilder.andWhere('donations.id < :cursor', {
+          cursor: pagination.cursor,
+        });
+    }
+
+    const donations = await queryBuilder.getMany();
+
+    return donations;
   }
 }
 

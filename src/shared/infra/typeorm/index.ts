@@ -1,3 +1,3 @@
 import { createConnection } from 'typeorm';
 
-export default createConnection();
+export default createConnection;

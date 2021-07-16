@@ -7,8 +7,10 @@ import {
   request,
   httpPatch,
   requestParam,
+  queryParam,
 } from 'inversify-express-utils';
 import { Response, Request } from 'express';
+import { classToClass } from 'class-transformer';
 
 import { container } from '@shared/container';
 
@@ -18,6 +20,8 @@ import StartEventService from '@modules/events/services/StartEventService';
 import EndEventService from '@modules/events/services/EndEventService';
 import ShowEventTotalDonationsService from '@modules/events/services/ShowEventTotalDonationsService';
 import ShowActiveEventService from '@modules/events/services/ShowActiveEventService';
+import ListAllEventDonationsService from '@modules/events/services/ListAllEventDonationsService';
+import ListIncentivesService from '@modules/events/services/ListIncentivesService';
 
 import { createEventValidation, parameterIdValidation } from '../validations';
 
@@ -96,6 +100,39 @@ class EventsController implements interfaces.Controller {
     const total = await showEventTotalDonations.execute({ event_id });
 
     return res.json({ total });
+  }
+
+  @httpGet('/:id/donations', parameterIdValidation)
+  public async eventDonations(
+    @requestParam('id') event_id: number,
+    @response() res: Response,
+    @queryParam('limit') limit: number,
+    @queryParam('cursor') cursor?: number,
+  ): Promise<Response> {
+    const listAllEventDonations = container.resolve(
+      ListAllEventDonationsService,
+    );
+
+    const donations = await listAllEventDonations.execute({
+      event_id,
+      pagination: { limit, cursor },
+    });
+
+    return res.json(donations);
+  }
+
+  @httpGet('/:id/incentives', parameterIdValidation)
+  public async eventIncentives(
+    @response() res: Response,
+    @requestParam('id') id: number,
+  ): Promise<Response> {
+    const listIncentives = container.resolve(ListIncentivesService);
+
+    const incentives = await listIncentives.execute({
+      event_id: id,
+    });
+
+    return res.json(classToClass(incentives));
   }
 }
 
